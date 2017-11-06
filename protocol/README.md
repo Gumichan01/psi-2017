@@ -2,36 +2,38 @@
 
 --------------------------------------------
 
-## Protocol de Communication 
+## Protocol de Communication
 --------------------------------------------
 
-### Format Executable 
+### Format Executable
 
-- ./client <ip-serveur> <port-serveur> <port-msg>
-	
+Client :
 
+		./client <ip-serveur> <port-serveur> <port-msg>
 
-- ./serveur <port>
+Serveur :
+
+		./serveur <port>
 
 
 --------------------------------------------
 
-### Fonctionalite Client : 
+### Fonctionalite Client :
 
 1) Connection : "connect:port\n"
 
-	port : Port sur lequel le client recoit les messages d'autres client.
-	
-	Reponse Serveur : 
+	port : Port sur lequel le client reçoit les messages d'autres client.
 
-		- "code:con:OK\n" (connection OK)
+	Réponse Serveur :
 
-		- "code:con:FAIL\n" (connection failed)
+		- "code:con:OK\n" (connexion OK)
+
+		- "code:con:FAIL\n" (connexion KO)
 
 
-2) List des annonces : "annonce:list\n"
+2) Liste des annonces : "annonce:list\n"
 
-	Reponse Serveur : 
+	Réponse Serveur :
 
 		- "listannonce:|id;titre|id;titre|...|id;titre|\n"
 
@@ -40,22 +42,22 @@
 		- "code:list:FAIL\n"
 
 
-3) Creer une nouvelle annonce : "annonce:titre:texte\n"
+3) Créer une nouvelle annonce : "annonce:titre:texte\n"
 	titre : titre de l'annonce
 	texte : contenu de l'annonce
 
-	Reponse Serveur : 
+	Réponse Serveur :
 
 		- "code:ann:OK\n" (annonce a ete bien ajoute)
 
 		- "code:ann:FAIL\n" (annonce n'a pas ete ajoute)
 
 
-4) Recuperer une annonce : "annonce:get:id\n"
+4) Récupérer une annonce : "annonce:get:id\n"
 
-	id : ID de l'annonce (recupere dans la liste)
+	id : ID de l'annonce (récupère dans la liste)
 
-	Reponse Serveur : 
+	Réponse Serveur :
 
 		- "annonce:titre:texte\n"
 				titre : titre de l'annonce
@@ -63,26 +65,26 @@
 
 		- "code:FAIL\n"
 
-5) Recuperer l'ip du proprietaire d'une annonce : "annonce:com:id\n"
+5) Récupérer l'ip du propriétaire d'une annonce : "annonce:com:id\n"
 
 	id : ID de l'annonce
 
-	Reponse Serveur : 
+	Réponse Serveur :
 
 		- "client:ip:port\n"
 
 		- "code:con:FAIL\n"
 
-6) Deconnection : "disconnect\n"
+6) Déconnexion : "disconnect\n"
 
 
 #### Communication Client/Client :
 
-- Connection : "connect:port\n"
+- Connexion : "connect:port\n"
 
-	port : Port sur lequel le client recevant la demande doit repondre.
+	port : Port sur lequel le client recevant la demande doit répondre.
 
-	Reponse : 
+	Réponse :
 
 		- "code:OK\n"
 
@@ -90,4 +92,4 @@
 
 - Message : "msg:text\n"
 
-- Deconnection : "disconnect\n"
+- Déconnexion : "disconnect\n"
