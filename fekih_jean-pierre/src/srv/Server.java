@@ -1,19 +1,19 @@
 package srv;
 
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
 
-	public static void main(String [] argv) {
-		
-		ServerSocket srv = null;
-		final int DEFAULT_PORT = 2408; 
+	public static void main(String[] argv) {
 
-		int port = (argv.length == 0) ? DEFAULT_PORT : Integer.parseInt(argv[0]);
-		
+		ServerSocket srv = null;
+		final int DEFAULT_PORT = 2408;
+
+		int port = (argv.length == 0) ? DEFAULT_PORT : Integer
+				.parseInt(argv[0]);
+
 		try {
 
 			srv = new ServerSocket(port);
@@ -22,7 +22,7 @@ public class Server {
 			while (true) {
 
 				Socket sock = srv.accept();
-				sock.close();
+				new Thread(new RunClient(sock)).start();
 			}
 
 		} catch (IOException io) {
@@ -36,7 +36,8 @@ public class Server {
 				if (srv != null)
 					srv.close();
 
-			} catch (IOException e) {}
+			} catch (IOException e) {
+			}
 		}
 	}
 }
