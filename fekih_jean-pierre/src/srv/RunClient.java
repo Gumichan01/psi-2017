@@ -20,10 +20,11 @@ public class RunClient implements Runnable {
 
 			sock.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ie) {
+			ie.printStackTrace();
+		} catch (NullPointerException ne) {
+			ne.printStackTrace();
 		}
-
 	}
 
 }
