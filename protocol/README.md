@@ -9,11 +9,11 @@
 
 Client :
 
-		./client <ip-serveur> <port-serveur> <port-msg>
+		`./client <ip-serveur> <port-serveur> <port-msg>`
 
 Serveur :
 
-		./serveur <port>
+		`./serveur <port>`
 
 
 --------------------------------------------
@@ -27,8 +27,6 @@ Serveur :
 	Réponse Serveur :
 
 		- "code:con:OK\n" (connexion OK)
-
-		- "code:con:FAIL\n" (connexion KO)
 
 
 2) Liste des annonces : "annonce:list\n"
@@ -75,7 +73,17 @@ Serveur :
 
 		- "code:con:FAIL\n"
 
-6) Déconnexion : "disconnect\n"
+6) Supprimer une annonce : "annonce:del:id\n"
+
+    id : ID de l'annonce
+    
+    Réponse Serveur :
+        
+        - "annonce:del:OK\n"
+        
+        - "annonce:del:FAIL\n"
+
+7) Déconnexion : "disconnect\n"
 
 
 #### Communication Client/Client :
@@ -85,11 +93,11 @@ Serveur :
 	port : Port sur lequel le client recevant la demande doit répondre.
 
 	Réponse :
-
+    
 		- "code:OK\n"
 
-		- "code:FAIL\n"
 
 - Message : "msg:text\n"
+
 
 - Déconnexion : "disconnect\n"
