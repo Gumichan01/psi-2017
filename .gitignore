@@ -8,6 +8,7 @@
 ./*/bin/
 fekih_jean-pierre/.classpath
 fekih_jean-pierre/.project
+fekih_jean-pierre/.settings/
 
 # Compiled class file
 *.class
