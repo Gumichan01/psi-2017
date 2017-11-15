@@ -71,6 +71,8 @@ public class Announces {
 			st.append(a.toString());
 			st.append(Keyword.PIPE);
 		}
+		
+		return st.toString();
 	}
 	
 }
