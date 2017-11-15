@@ -67,6 +67,7 @@ public class MessageParser {
 
 	private void parseConnect(final String[] tokens) throws Exception {
 
+		// TODO Meriem connect
 		throw new Exception("parseConnect() not implemented yet");
 	}
 
@@ -77,11 +78,13 @@ public class MessageParser {
 
 	private void parseListAnnonce(final String[] tokens) throws Exception {
 
+		// TODO Luxon parse list announce
 		throw new Exception("parseListAnnonce() not implemented yet");
 	}
 
 	private void parseAnnonce(final String[] tokens) throws Exception {
 
+		// TODO Luxon parse announce
 		throw new Exception("parseAnnonce() not implemented yet");
 	}
 
@@ -92,6 +95,7 @@ public class MessageParser {
 
 	private void parseDisconnect(final String[] tokens) throws Exception {
 
+		// TODO Meriem disconnect
 		throw new Exception("parseDisconnect() not implemented yet");
 	}
 
