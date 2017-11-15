@@ -20,7 +20,6 @@ public class MessageParser {
 		parse();
 	}
 	
-
 	private void parse() {
 
 		Pattern p = Pattern.compile(Keyword.COLON);
