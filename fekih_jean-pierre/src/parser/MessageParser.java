@@ -26,7 +26,7 @@ public class MessageParser {
 		String[] tokens = p.split(msg);
 
 		try {
-			
+
 			switch (tokens[0]) {
 
 			case Keyword.CONNECT:
@@ -57,13 +57,12 @@ public class MessageParser {
 				parsed = false;
 				break;
 			}
-			
+
 		} catch (Exception e) {
-			
+
 			parsed = false;
 			e.printStackTrace();
 		}
-
 	}
 
 	private void parseConnect(final String[] tokens) throws Exception {
