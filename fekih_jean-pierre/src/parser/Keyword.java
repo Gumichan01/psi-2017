@@ -1,6 +1,6 @@
 package parser;
 
-class Keyword {
+public class Keyword {
 
 	/** Separators */
 	public static final String COLON = ":";
