@@ -19,6 +19,7 @@ public class MessageParser {
 		parsed = false;
 		parse();
 	}
+	
 
 	private void parse() {
 
