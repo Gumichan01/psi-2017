@@ -8,6 +8,7 @@ public class MessageParser {
 
 	private String msg;
 	private boolean parsed;
+	private ASTmessage ast = null;
 
 	public MessageParser(String m) {
 
@@ -91,6 +92,7 @@ public class MessageParser {
 		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
 
 			// TODO créer une représentation abstraite du message
+			ast = new ASTmessage(tokens[1], tokens[2]);
 			parsed = true;
 		}
 	}
@@ -113,6 +115,11 @@ public class MessageParser {
 	public boolean isWellParsed() {
 
 		return parsed;
+	}
+
+	public ASTmessage getAST() {
+
+		return ast;
 	}
 
 }

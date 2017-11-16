@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import parser.ASTmessage;
 import parser.MessageParser;
 
 public class RunClient implements Runnable {
@@ -52,6 +53,9 @@ public class RunClient implements Runnable {
 					// TODO récupérer la repésentation abstraite du message
 					// TODO traiter la demande analysée
 					// TODO envoyer la réponse au client
+					System.out.println("OK");
+					ASTmessage m = parser.getAST();
+					System.out.println(m.getType().toString() + ": " + m.getAnnoucne().getTitle() + " " + m.getAnnoucne().getText());
 
 				} else {
 
