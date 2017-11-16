@@ -55,7 +55,7 @@ public class RunClient implements Runnable {
 					// TODO envoyer la réponse au client
 					System.out.println("OK");
 					ASTmessage m = parser.getAST();
-					System.out.println(m.getType().toString() + ": " + m.getAnnoucne().getTitle() + " " + m.getAnnoucne().getText());
+					System.out.println(m.getType().toString());
 
 				} else {
 
