@@ -42,7 +42,6 @@ public class RunClient implements Runnable {
 				if (received_message == null || received_message.isEmpty()) {
 
 					keep_going = false;
-					sock.close();
 					break;
 				}
 
@@ -65,12 +64,17 @@ public class RunClient implements Runnable {
 				keep_going = false; // pour tester (à enlever)
 			}
 
-			sock.close();
-
 		} catch (IOException ie) {
 			ie.printStackTrace();
+
 		} catch (NullPointerException | IllegalArgumentException ne) {
 			ne.printStackTrace();
+
+		} finally {
+			try {
+				sock.close();
+			} catch (IOException e) {
+			}
 		}
 	}
 }
