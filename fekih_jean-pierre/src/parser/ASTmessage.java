@@ -50,5 +50,54 @@ public class ASTmessage {
 	
 	// Members
 	Type type;
+	Connect connect = null;
+	Announce announce = null;
+	AnnounceGetter agetter = null;
 	
+	
+	ASTmessage(Type ty) {
+		
+		type = ty;
+	}
+	
+	ASTmessage(Type ty, int v) {
+		
+		this(ty);
+		
+		if(ty == Type.CONNECT) {
+			
+			connect = new Connect();
+			connect.port = v;
+		
+		} else {	// Announce getter
+			
+			agetter = new AnnounceGetter();
+			agetter.id = v;
+		}
+	}
+	
+	ASTmessage(String title, String text) {
+		
+		this(Type.ANNOUNCE);
+		announce = new Announce();
+		announce.title = title;
+		announce.text = text;
+	}
+	
+	
+	public Type getType() {
+		return type;
+	}
+	
+	public Connect getConnect() {
+		return connect;
+	}
+
+	public Announce getAnnoucne() {
+		return announce;
+	}
+	
+	public AnnounceGetter getAnnounceGetter() {
+		return agetter;
+	}
 }
