@@ -10,7 +10,7 @@ package parser;
 public class ASTmessage {
 
 	public enum Type {
-		CONNECT, CODE, ANLIST, ANNOUNCE, GET, MSG, DISCONECT
+		CONNECT, CODE, LIST, ANLIST, ANNOUNCE, GET, MSG, DISCONECT
 	}
 
 	// Abstraction of "connect:port"

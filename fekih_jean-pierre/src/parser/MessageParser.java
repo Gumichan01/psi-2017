@@ -2,9 +2,14 @@ package parser;
 
 import java.util.regex.Pattern;
 
+import parser.ASTmessage.Type;
+
 public class MessageParser {
 
+	private static int MSG_CONNECT_LENGTH = 2;
 	private static int MSG_ANNOUNCE_LENGTH = 3;
+	private static int MSG_REQLIST_LENGTH = 2;
+	private static int MSG_ANLIST_LENGTH = 2;
 
 	private String msg;
 	private boolean parsed;
@@ -38,6 +43,10 @@ public class MessageParser {
 
 			case Keyword.CODE:
 				parseCode(tokens);
+				break;
+
+			case Keyword.LIST:
+				parseListRequest(tokens);
 				break;
 
 			case Keyword.ANLIST:
@@ -74,12 +83,33 @@ public class MessageParser {
 
 	private void parseConnect(final String[] tokens) throws Exception {
 
-		throw new Exception("parseConnect() not implemented yet");
+		if (tokens.length == MSG_CONNECT_LENGTH) {
+
+			try {
+				int v = Integer.parseInt(tokens[1]);
+				ast = new ASTmessage(Type.CONNECT, v);
+
+			} catch (NumberFormatException e) {
+
+				parsed = false;
+			}
+
+			parsed = true;
+		}
 	}
 
 	private void parseCode(final String[] tokens) throws Exception {
 
 		throw new Exception("parseCode() not implemented yet");
+	}
+
+	private void parseListRequest(final String[] tokens) throws Exception {
+
+		if (tokens.length == MSG_REQLIST_LENGTH) {
+
+			ast = new ASTmessage(Type.LIST);
+			parsed = true;
+		}
 	}
 
 	private void parseListAnnonce(final String[] tokens) throws Exception {
@@ -91,7 +121,6 @@ public class MessageParser {
 
 		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
 
-			// TODO créer une représentation abstraite du message
 			ast = new ASTmessage(tokens[1], tokens[2]);
 			parsed = true;
 		}
