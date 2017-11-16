@@ -4,22 +4,24 @@ import java.util.regex.Pattern;
 
 public class MessageParser {
 
+	private static int MSG_ANNOUNCE_LENGTH = 3;
+
 	private String msg;
 	private boolean parsed;
 
 	public MessageParser(String m) {
 
 		if (m == null)
-			throw new NullPointerException("null string");
+			throw new NullPointerException("parser - null string");
 
 		if (m.isEmpty())
-			throw new IllegalArgumentException("empty string");
+			throw new IllegalArgumentException("parser - empty string");
 
 		msg = m;
 		parsed = false;
 		parse();
 	}
-	
+
 	private void parse() {
 
 		Pattern p = Pattern.compile(Keyword.COLON);
@@ -45,6 +47,10 @@ public class MessageParser {
 				parseAnnonce(tokens);
 				break;
 
+			case Keyword.GET:
+				parseGetAnnonce(tokens);
+				break;
+
 			case Keyword.MSG:
 				parseMessage(tokens);
 				break;
@@ -67,7 +73,6 @@ public class MessageParser {
 
 	private void parseConnect(final String[] tokens) throws Exception {
 
-		// TODO Meriem connect
 		throw new Exception("parseConnect() not implemented yet");
 	}
 
@@ -78,14 +83,21 @@ public class MessageParser {
 
 	private void parseListAnnonce(final String[] tokens) throws Exception {
 
-		// TODO Luxon parse list announce
 		throw new Exception("parseListAnnonce() not implemented yet");
 	}
 
 	private void parseAnnonce(final String[] tokens) throws Exception {
 
-		// TODO Luxon parse announce
-		throw new Exception("parseAnnonce() not implemented yet");
+		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
+
+			// TODO créer une représentation abstraite du message
+			parsed = true;
+		}
+	}
+
+	private void parseGetAnnonce(final String[] tokens) throws Exception {
+
+		throw new Exception("parseGetAnnonce() not implemented yet");
 	}
 
 	private void parseMessage(final String[] tokens) throws Exception {
@@ -95,7 +107,6 @@ public class MessageParser {
 
 	private void parseDisconnect(final String[] tokens) throws Exception {
 
-		// TODO Meriem disconnect
 		throw new Exception("parseDisconnect() not implemented yet");
 	}
 
