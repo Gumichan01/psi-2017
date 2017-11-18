@@ -8,7 +8,6 @@ public class MessageParser {
 
 	private static int MSG_CONNECT_LENGTH = 2;
 	private static int MSG_ANNOUNCE_LENGTH = 3;
-	private static int MSG_REQLIST_LENGTH = 2;
 	private static int MSG_ANLIST_LENGTH = 2;
 
 	private String msg;
@@ -45,20 +44,12 @@ public class MessageParser {
 				parseCode(tokens);
 				break;
 
-			case Keyword.LIST:
-				parseListRequest(tokens);
-				break;
-
 			case Keyword.ANLIST:
 				parseListAnnonce(tokens);
 				break;
 
 			case Keyword.ANNOUNCE:
 				parseAnnonce(tokens);
-				break;
-
-			case Keyword.GET:
-				parseGetAnnonce(tokens);
 				break;
 
 			case Keyword.MSG:
@@ -104,7 +95,7 @@ public class MessageParser {
 
 	private void parseListRequest(final String[] tokens) throws Exception {
 
-		if (tokens.length == MSG_REQLIST_LENGTH) {
+		if (tokens.length == MSG_ANLIST_LENGTH) {
 
 			ast = new ASTmessage(Type.LIST);
 			parsed = true;
@@ -118,16 +109,58 @@ public class MessageParser {
 
 	private void parseAnnonce(final String[] tokens) throws Exception {
 
-		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
+		switch (tokens[1]) {
 
-			ast = new ASTmessage(tokens[1], tokens[2]);
-			parsed = true;
+		case Keyword.LIST:
+			parseListRequest(tokens);
+			break;
+
+		case Keyword.GET:
+		case Keyword.COM:
+		case Keyword.DELETE:
+			parseGetAnnonce(tokens);
+			break;
+
+		default:
+			if (tokens.length == MSG_ANNOUNCE_LENGTH) {
+
+				ast = new ASTmessage(tokens[1], tokens[2]);
+				parsed = true;
+			}
+			break;
 		}
 	}
 
 	private void parseGetAnnonce(final String[] tokens) throws Exception {
 
-		throw new Exception("parseGetAnnonce() not implemented yet");
+		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
+
+			Type ty = null;
+			
+			switch (tokens[1]) {
+
+			case Keyword.GET:
+				ty = Type.GET;
+				break;
+			case Keyword.COM:
+				ty = Type.COM;
+				break;
+			case Keyword.DELETE:
+				ty = Type.DEL;
+				break;
+			}
+			
+			
+			try {
+				int v = Integer.parseInt(tokens[2]);
+				ast = new ASTmessage(ty, v);
+				parsed = true;
+
+			} catch (NumberFormatException e) {
+
+				parsed = false;
+			}
+		}
 	}
 
 	private void parseMessage(final String[] tokens) throws Exception {
@@ -182,6 +215,25 @@ public class MessageParser {
 			System.out.println(m3.getType());
 		} else
 			System.err.println("failure p3");
+
+		MessageParser[] p345 = { new MessageParser("annonce:get:24"),
+				new MessageParser("annonce:com:24"),
+				new MessageParser("annonce:del:24") };
+
+		int i = 0;
+		for (MessageParser mp : p345) {
+
+			if (mp.isWellParsed()) {
+
+				ASTmessage m345 = mp.getAST();
+				System.out.println(m345.getType() + " "
+						+ m345.getAnnounceID().getId());
+
+			} else
+				System.err.println("failure p345 -  " + i);
+
+			i++;
+		}
 
 	}
 
