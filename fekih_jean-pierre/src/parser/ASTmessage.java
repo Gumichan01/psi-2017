@@ -10,7 +10,7 @@ package parser;
 public class ASTmessage {
 
 	public enum Type {
-		CONNECT, CODE, LIST, ANLIST, ANNOUNCE, GET, MSG, DISCONECT
+		CONNECT, CODE, LIST, ANLIST, ANNOUNCE, GET, DEL, COM, MSG, DISCONNECT
 	}
 
 	// Abstraction of "connect:port"
@@ -39,7 +39,7 @@ public class ASTmessage {
 		}
 	}
 
-	// Abstraction of "annonce:get:id" or "annonce:get:id"
+	// Abstraction of "annonce:<cmd>:id"
 	public class AnnounceID {
 
 		private int id;
@@ -69,7 +69,7 @@ public class ASTmessage {
 			connect = new Connect();
 			connect.port = v;
 
-		} else { // Announce getter
+		} else {
 
 			aid = new AnnounceID();
 			aid.id = v;

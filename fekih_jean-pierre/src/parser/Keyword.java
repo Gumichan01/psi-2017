@@ -22,9 +22,12 @@ public class Keyword {
 	// Announce
 	public static final String ANNOUNCE = "annonce";
 	public static final String ANN = "ann";
+	public static final String DELETE = "del";
 
+	
 	// Owner
 	public static final String GET = "get";
+	public static final String COM = "com";
 	public static final String CLIENT = "client";
 
 	// Miscellaneous
