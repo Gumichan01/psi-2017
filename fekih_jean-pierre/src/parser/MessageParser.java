@@ -4,12 +4,22 @@ import java.util.regex.Pattern;
 
 import parser.ASTmessage.Type;
 
+/**
+ * 
+ * Client / Server
+ * 
+ * Server / Client TODO
+ * 
+ * Client / Client OK 
+ * 
+ * */
 public class MessageParser {
 
 	private static int MSG_CONNECT_LENGTH = 2;
 	private static int MSG_DISCONNECT_LENGTH = 1;
 	private static int MSG_ANNOUNCE_LENGTH = 3;
 	private static int MSG_ANLIST_LENGTH = 2;
+	private static int MSG_MESSAGE_LENGTH = 2;
 
 	private String msg;
 	private boolean parsed;
@@ -37,6 +47,7 @@ public class MessageParser {
 
 			switch (tokens[0]) {
 
+			// Server
 			case Keyword.CONNECT:
 				parseConnect(tokens);
 				break;
@@ -49,7 +60,7 @@ public class MessageParser {
 				parseListAnnonce(tokens);
 				break;
 
-			case Keyword.ANNOUNCE:
+			case Keyword.ANNOUNCE:			// Server/client
 				parseAnnonce(tokens);
 				break;
 
@@ -61,6 +72,9 @@ public class MessageParser {
 				parseDisconnect(tokens);
 				break;
 
+			//Client
+				// TODO
+				
 			default:
 				parsed = false;
 				break;
@@ -159,14 +173,19 @@ public class MessageParser {
 
 			} catch (NumberFormatException e) {
 
-				parsed = false;
+				ast = new ASTmessage(ty, tokens[2]);
+				parsed = true;
 			}
 		}
 	}
 
 	private void parseMessage(final String[] tokens) throws Exception {
 
-		throw new Exception("parseMessage() not implemented yet");
+		if(tokens.length == MSG_MESSAGE_LENGTH) {
+			ast = new ASTmessage(Type.MSG, tokens[1]);
+			parsed = true;		
+			
+		}
 	}
 
 	private void parseDisconnect(final String[] tokens) throws Exception {
@@ -249,6 +268,16 @@ public class MessageParser {
 			
 		} else
 			System.err.println("failure p4");
+		
+		MessageParser p5 = new MessageParser("msg:text");
+
+		if (p5.isWellParsed()) {
+
+			ASTmessage m5 = p5.getAST();
+
+			System.out.println(m5.getType() + " " + m5.getMSG());
+		} else
+			System.err.println("failure p5");
 
 	}
 

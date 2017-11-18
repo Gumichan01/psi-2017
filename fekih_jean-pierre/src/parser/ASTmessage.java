@@ -1,5 +1,7 @@
 package parser;
 
+import parser.ASTmessage.Type;
+
 /**
  * ASTmesage is an abstract representation of a message
  * 
@@ -48,12 +50,14 @@ public class ASTmessage {
 			return id;
 		}
 	}
+	
 
 	// Members
 	Type type;
 	Connect connect = null;
 	Announce announce = null;
 	AnnounceID aid = null;
+	String code = null;
 
 	ASTmessage(Type ty) {
 
@@ -84,6 +88,12 @@ public class ASTmessage {
 		announce.text = text;
 	}
 
+	public ASTmessage(Type ty, String s) {
+		
+		this(ty);
+		code = s;
+	}
+
 	public Type getType() {
 		return type;
 	}
@@ -98,5 +108,9 @@ public class ASTmessage {
 
 	public AnnounceID getAnnounceID() {
 		return aid;
+	}
+	
+	public String getMSG() {
+		return code;
 	}
 }
