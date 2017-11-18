@@ -7,6 +7,7 @@ import parser.ASTmessage.Type;
 public class MessageParser {
 
 	private static int MSG_CONNECT_LENGTH = 2;
+	private static int MSG_DISCONNECT_LENGTH = 1;
 	private static int MSG_ANNOUNCE_LENGTH = 3;
 	private static int MSG_ANLIST_LENGTH = 2;
 
@@ -170,7 +171,11 @@ public class MessageParser {
 
 	private void parseDisconnect(final String[] tokens) throws Exception {
 
-		throw new Exception("parseDisconnect() not implemented yet");
+		if(tokens.length == MSG_DISCONNECT_LENGTH) {
+			
+			ast = new ASTmessage(Type.DISCONNECT);
+			parsed = true;
+		}
 	}
 
 	public boolean isWellParsed() {
@@ -234,6 +239,16 @@ public class MessageParser {
 
 			i++;
 		}
+		
+		MessageParser p4 = new MessageParser("disconnect");
+
+		if (p4.isWellParsed()) {
+
+			ASTmessage m4 = p4.getAST();
+			System.out.println(m4.getType());
+			
+		} else
+			System.err.println("failure p4");
 
 	}
 
