@@ -88,13 +88,12 @@ public class MessageParser {
 			try {
 				int v = Integer.parseInt(tokens[1]);
 				ast = new ASTmessage(Type.CONNECT, v);
+				parsed = true;
 
 			} catch (NumberFormatException e) {
 
 				parsed = false;
 			}
-
-			parsed = true;
 		}
 	}
 
@@ -147,8 +146,43 @@ public class MessageParser {
 	}
 
 	public ASTmessage getAST() {
-
 		return ast;
+	}
+
+	public static void main(String[] args) {
+
+		MessageParser p1 = new MessageParser("connect:1523");
+
+		if (p1.isWellParsed()) {
+
+			ASTmessage m1 = p1.getAST();
+
+			System.out.println(m1.getType().toString() + " "
+					+ m1.getConnect().getPort());
+		} else
+			System.err.println("failure p1");
+
+		MessageParser p2 = new MessageParser("annonce:hello:がんばつて Gumichan");
+
+		if (p2.isWellParsed()) {
+
+			ASTmessage m2 = p2.getAST();
+
+			System.out.println(m2.getType() + " " + m2.getAnnounce().getTitle()
+					+ " " + m2.getAnnounce().getText());
+		} else
+			System.err.println("failure p2");
+
+		MessageParser p3 = new MessageParser("annonce:list");
+
+		if (p3.isWellParsed()) {
+
+			ASTmessage m3 = p3.getAST();
+
+			System.out.println(m3.getType());
+		} else
+			System.err.println("failure p3");
+
 	}
 
 }
