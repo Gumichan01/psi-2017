@@ -12,8 +12,10 @@ import parser.MessageParser;
 
 public class RunClient implements Runnable {
 
-	private Socket sock;
-
+	private Socket sock = null;
+	private BufferedReader bf = null;
+	private PrintWriter pw = null;
+	
 	public RunClient(Socket s) {
 
 		sock = s;
@@ -27,9 +29,9 @@ public class RunClient implements Runnable {
 
 		try {
 
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
+			bf = new BufferedReader(new InputStreamReader(
 					sock.getInputStream()));
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+			pw = new PrintWriter(new OutputStreamWriter(
 					sock.getOutputStream()));
 
 			System.out.println("Connection from "
@@ -55,13 +57,14 @@ public class RunClient implements Runnable {
 					System.out.println("OK");
 					ASTmessage m = parser.getAST();
 					System.out.println(m.getType().toString());
+					respond(eval(m));
 
 				} else {
 
-					// TODO envoi message d'erreur
+					keep_going = false; // pour tester (à enlever)
 				}
 
-				keep_going = false; // pour tester (à enlever)
+				//keep_going = false; // pour tester (à enlever)
 			}
 
 		} catch (IOException ie) {
@@ -76,5 +79,16 @@ public class RunClient implements Runnable {
 			} catch (IOException e) {
 			}
 		}
+	}
+	
+	private String eval(final ASTmessage ast) {
+		
+		return "echo";
+	}
+	
+	private  void respond(String msg) {
+		pw.println(msg);
+		pw.flush();
+		
 	}
 }
