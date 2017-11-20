@@ -8,7 +8,7 @@ import parser.ASTmessage.Type;
  * It is defined as a couple (e,m) : - e is the enumeration that defines the
  * type of the message - m is the representation of the message related to
  * 
- * */
+ */
 public class ASTmessage {
 
 	public enum Type {
@@ -50,7 +50,7 @@ public class ASTmessage {
 			return id;
 		}
 	}
-	
+
 
 	// Members
 	Type type;
@@ -89,7 +89,7 @@ public class ASTmessage {
 	}
 
 	public ASTmessage(Type ty, String s) {
-		
+
 		this(ty);
 		code = s;
 	}
@@ -109,7 +109,7 @@ public class ASTmessage {
 	public AnnounceID getAnnounceID() {
 		return aid;
 	}
-	
+
 	public String getMSG() {
 		return code;
 	}

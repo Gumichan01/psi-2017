@@ -10,9 +10,9 @@ import parser.ASTmessage.Type;
  * 
  * Server / Client TODO
  * 
- * Client / Client OK 
+ * Client / Client OK
  * 
- * */
+ */
 public class MessageParser {
 
 	private static int MSG_CONNECT_LENGTH = 2;
@@ -20,6 +20,8 @@ public class MessageParser {
 	private static int MSG_ANNOUNCE_LENGTH = 3;
 	private static int MSG_ANLIST_LENGTH = 2;
 	private static int MSG_MESSAGE_LENGTH = 2;
+	private static int MSG_CODE_LONG_LENGTH = 3;
+	private static int MSG_CODE_SHORT_LENGTH = 2;
 
 	private String msg;
 	private boolean parsed;
@@ -47,7 +49,6 @@ public class MessageParser {
 
 			switch (tokens[0]) {
 
-			// Server
 			case Keyword.CONNECT:
 				parseConnect(tokens);
 				break;
@@ -60,7 +61,7 @@ public class MessageParser {
 				parseListAnnonce(tokens);
 				break;
 
-			case Keyword.ANNOUNCE:			// Server/client
+			case Keyword.ANNOUNCE:
 				parseAnnonce(tokens);
 				break;
 
@@ -72,9 +73,6 @@ public class MessageParser {
 				parseDisconnect(tokens);
 				break;
 
-			//Client
-				// TODO
-				
 			default:
 				parsed = false;
 				break;
@@ -105,7 +103,36 @@ public class MessageParser {
 
 	private void parseCode(final String[] tokens) throws Exception {
 
-		throw new Exception("parseCode() not implemented yet");
+		Type ty = Type.CODE;
+		String status = null;
+		switch (tokens[1]) {
+		case Keyword.CON:
+		case Keyword.ANN:
+		case Keyword.LIST:
+			if (tokens.length == MSG_CODE_LONG_LENGTH) {
+				status = tokens[2];
+			} else {
+				parsed = false;
+				return;
+			}
+			break;
+		default:
+			if (tokens.length == MSG_CODE_SHORT_LENGTH) {
+				status = tokens[1];
+			} else {
+				parsed = false;
+				return;
+			}
+			break;
+		}
+
+		if (status.equals(Keyword.SUCCESS) || status.equals(Keyword.FAILURE)) {
+			ast = new ASTmessage(ty, status);
+			parsed = true;
+		} else {
+			parsed = false;
+		}
+
 	}
 
 	private void parseListRequest(final String[] tokens) throws Exception {
@@ -151,7 +178,7 @@ public class MessageParser {
 		if (tokens.length == MSG_ANNOUNCE_LENGTH) {
 
 			Type ty = null;
-			
+
 			switch (tokens[1]) {
 
 			case Keyword.GET:
@@ -164,8 +191,7 @@ public class MessageParser {
 				ty = Type.DEL;
 				break;
 			}
-			
-			
+
 			try {
 				int v = Integer.parseInt(tokens[2]);
 				ast = new ASTmessage(ty, v);
@@ -181,17 +207,16 @@ public class MessageParser {
 
 	private void parseMessage(final String[] tokens) throws Exception {
 
-		if(tokens.length == MSG_MESSAGE_LENGTH) {
+		if (tokens.length == MSG_MESSAGE_LENGTH) {
 			ast = new ASTmessage(Type.MSG, tokens[1]);
-			parsed = true;		
-			
+			parsed = true;
 		}
 	}
 
 	private void parseDisconnect(final String[] tokens) throws Exception {
 
-		if(tokens.length == MSG_DISCONNECT_LENGTH) {
-			
+		if (tokens.length == MSG_DISCONNECT_LENGTH) {
+
 			ast = new ASTmessage(Type.DISCONNECT);
 			parsed = true;
 		}
@@ -214,8 +239,7 @@ public class MessageParser {
 
 			ASTmessage m1 = p1.getAST();
 
-			System.out.println(m1.getType().toString() + " "
-					+ m1.getConnect().getPort());
+			System.out.println(m1.getType().toString() + " " + m1.getConnect().getPort());
 		} else
 			System.err.println("failure p1");
 
@@ -225,8 +249,7 @@ public class MessageParser {
 
 			ASTmessage m2 = p2.getAST();
 
-			System.out.println(m2.getType() + " " + m2.getAnnounce().getTitle()
-					+ " " + m2.getAnnounce().getText());
+			System.out.println(m2.getType() + " " + m2.getAnnounce().getTitle() + " " + m2.getAnnounce().getText());
 		} else
 			System.err.println("failure p2");
 
@@ -240,8 +263,7 @@ public class MessageParser {
 		} else
 			System.err.println("failure p3");
 
-		MessageParser[] p345 = { new MessageParser("annonce:get:24"),
-				new MessageParser("annonce:com:24"),
+		MessageParser[] p345 = { new MessageParser("annonce:get:24"), new MessageParser("annonce:com:24"),
 				new MessageParser("annonce:del:24") };
 
 		int i = 0;
@@ -250,25 +272,24 @@ public class MessageParser {
 			if (mp.isWellParsed()) {
 
 				ASTmessage m345 = mp.getAST();
-				System.out.println(m345.getType() + " "
-						+ m345.getAnnounceID().getId());
+				System.out.println(m345.getType() + " " + m345.getAnnounceID().getId());
 
 			} else
 				System.err.println("failure p345 -  " + i);
 
 			i++;
 		}
-		
+
 		MessageParser p4 = new MessageParser("disconnect");
 
 		if (p4.isWellParsed()) {
 
 			ASTmessage m4 = p4.getAST();
 			System.out.println(m4.getType());
-			
+
 		} else
 			System.err.println("failure p4");
-		
+
 		MessageParser p5 = new MessageParser("msg:text");
 
 		if (p5.isWellParsed()) {
@@ -279,6 +300,55 @@ public class MessageParser {
 		} else
 			System.err.println("failure p5");
 
+		MessageParser p6 = new MessageParser("code:con:OK");
+
+		if (p6.isWellParsed()) {
+
+			ASTmessage m6 = p6.getAST();
+
+			System.out.println(m6.getType() + " " + m6.getMSG());
+		} else
+			System.err.println("failure p6");
+
+		MessageParser p7 = new MessageParser("code:list:FAIL");
+
+		if (p7.isWellParsed()) {
+
+			ASTmessage m7 = p7.getAST();
+
+			System.out.println(m7.getType() + " " + m7.getMSG());
+		} else
+			System.err.println("failure p7");
+
+		MessageParser p8 = new MessageParser("code:ann:OK");
+
+		if (p8.isWellParsed()) {
+
+			ASTmessage m8 = p8.getAST();
+
+			System.out.println(m8.getType() + " " + m8.getMSG());
+		} else
+			System.err.println("failure p8");
+
+		MessageParser p9 = new MessageParser("code:OK");
+
+		if (p9.isWellParsed()) {
+
+			ASTmessage m9 = p9.getAST();
+
+			System.out.println(m9.getType() + " " + m9.getMSG());
+		} else
+			System.err.println("failure p9");
+
+		MessageParser p10 = new MessageParser("code:FAIL");
+
+		if (p10.isWellParsed()) {
+
+			ASTmessage m10 = p10.getAST();
+
+			System.out.println(m10.getType() + " " + m10.getMSG());
+		} else
+			System.err.println("failure p10");
 	}
 
 }
