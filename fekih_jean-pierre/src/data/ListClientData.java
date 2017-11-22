@@ -24,6 +24,16 @@ public class ListClientData {
 		return false;
 	}
 
+	synchronized public ClientData get(int id) {
+
+		if (!map.containsKey(id)) {
+
+			return null;
+		}
+
+		return map.get(id);
+	}
+
 	synchronized public boolean delete(int cid) {
 
 		if (map.containsKey(cid)) {

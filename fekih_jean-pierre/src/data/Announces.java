@@ -56,7 +56,7 @@ public class Announces {
 		return found;
 	}
 
-	synchronized public int getOwner(int id) {
+	synchronized public Integer getOwner(int id) {
 
 		AnnounceData found = null;
 		Iterator<AnnounceData> it = announces.iterator();
