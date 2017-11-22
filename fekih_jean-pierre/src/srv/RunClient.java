@@ -155,7 +155,7 @@ public class RunClient implements Runnable {
 	// list
 	private String evalList(final ASTmessage ast) {
 
-		return null;
+		return Keyword.ANLIST + Keyword.COLON + Server.announces.toString() + Keyword.ENDL;
 	}
 
 	// add announce
@@ -193,7 +193,6 @@ public class RunClient implements Runnable {
 			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
 					+ Keyword.FAILURE + Keyword.ENDL;
 
-		// get client
 		ClientData cd = Server.clients.get(client_id);
 
 		if (cd == null)
