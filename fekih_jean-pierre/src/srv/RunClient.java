@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import parser.ASTmessage;
+import parser.ASTmessage.Type;
 import parser.MessageParser;
 
 public class RunClient implements Runnable {
@@ -77,7 +78,50 @@ public class RunClient implements Runnable {
 
 	private String eval(final ASTmessage ast) {
 
-		return "echo";
+		String s = null;
+		
+		switch(ast.getType()){
+
+		// add announce
+		case ANNOUNCE:
+			s = evalAddAnnounce(ast);
+			break;
+		
+		// get the owner of an announce
+		case COM:
+			s = evalGetOwner(ast);
+			break;
+			
+		// connection
+		case CONNECT:
+			s = evalConnection(ast);
+			break;
+		
+		// remove an announce
+		case DEL:
+			s = evalDelAnnounce(ast);
+			break;
+		
+		// disconnection
+		case DISCONNECT:
+			s = evalDisconnection(ast);
+			break;
+		
+		// Get announce
+		case GET:
+			s = evalGetAnnounce(ast);
+			break;
+			
+		// display list of announces
+		case LIST:
+			s = evalList(ast);
+			break;
+
+		default:
+			break;
+		}
+		
+		return s;
 	}
 
 	// connect
