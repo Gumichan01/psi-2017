@@ -36,12 +36,10 @@ public class RunClient implements Runnable {
 
 		try {
 
-			bf = new BufferedReader(
-					new InputStreamReader(sock.getInputStream()));
+			bf = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
 
-			System.out.println("Connection from "
-					+ sock.getInetAddress().toString() + ": " + sock.getPort());
+			System.out.println("Connection from " + sock.getInetAddress().toString() + ": " + sock.getPort());
 
 			while (keep_going) {
 
@@ -141,8 +139,7 @@ public class RunClient implements Runnable {
 		client_id = cdata.getId();
 
 		Server.clients.add(cdata);
-		return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
-				+ Keyword.SUCCESS + Keyword.ENDL;
+		return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
 	}
 
 	// disconnect
@@ -161,12 +158,23 @@ public class RunClient implements Runnable {
 	// add announce
 	private String evalAddAnnounce(final ASTmessage ast) {
 
-		return null;
+		boolean res = Server.announces.addAnnounce(ast.getAnnounce().getTitle(), ast.getAnnounce().getText(),
+				client_id);
+		if (!res) {
+			return Keyword.CODE + Keyword.COLON + Keyword.ANN + Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
+		} else {
+			return Keyword.CODE + Keyword.COLON + Keyword.ANN + Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
+		}
 	}
 
 	private String evalDelAnnounce(final ASTmessage ast) {
 
-		return null;
+		boolean res = Server.announces.removeAnnounce(ast.getAnnounceID().getId());
+		if (!res) {
+			return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE + Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
+		} else {
+			return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE + Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
+		}
 	}
 
 	// get announce
@@ -176,11 +184,9 @@ public class RunClient implements Runnable {
 		AnnounceData data = Server.announces.getAnnounce(id);
 
 		if (data == null)
-			return Keyword.CODE + Keyword.COLON + Keyword.FAILURE
-					+ Keyword.ENDL;
+			return Keyword.CODE + Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
 
-		return Keyword.ANNOUNCE + Keyword.COLON + data.toString()
-				+ Keyword.ENDL;
+		return Keyword.ANNOUNCE + Keyword.COLON + data.toString() + Keyword.ENDL;
 	}
 
 	// get client
@@ -190,15 +196,13 @@ public class RunClient implements Runnable {
 		Integer owner = Server.announces.getOwner(id);
 
 		if (owner == null)
-			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
-					+ Keyword.FAILURE + Keyword.ENDL;
+			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
 
 		// get client
 		ClientData cd = Server.clients.get(client_id);
 
 		if (cd == null)
-			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
-					+ Keyword.FAILURE + Keyword.ENDL;
+			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
 
 		return Keyword.CLIENT + Keyword.COLON + cd.toString() + Keyword.ENDL;
 	}
