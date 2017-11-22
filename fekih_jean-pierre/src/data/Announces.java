@@ -71,8 +71,7 @@ public class Announces {
 
 		return found != null ? found.getOwner() : null;
 	}
-	
-	
+
 	synchronized public boolean removeAnnounce(int id) {
 
 		AnnounceData found = null;
@@ -97,15 +96,17 @@ public class Announces {
 	@Override
 	synchronized public String toString() {
 
+		if (announces.isEmpty())
+			return "";
+
 		StringBuilder st = new StringBuilder(Keyword.PIPE);
 
 		for (AnnounceData a : announces) {
 
-			st.append(a.toString());
+			st.append(a.getID() + Keyword.SEMICOLON + a.getTitle());
 			st.append(Keyword.PIPE);
 		}
 
 		return st.toString();
 	}
-
 }
