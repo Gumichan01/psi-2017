@@ -4,6 +4,7 @@ public class Keyword {
 
 	/** Separators */
 	public static final String COLON = ":";
+	public static final String SEMICOLON = ";";
 	public static final String PIPE = "|";
 	public static final String ENDL = "\n";
 
