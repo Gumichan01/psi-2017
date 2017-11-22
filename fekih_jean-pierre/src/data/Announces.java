@@ -14,7 +14,7 @@ public class Announces {
 	}
 
 	@SuppressWarnings("finally")
-	public boolean addAnnounce(String title, String text) {
+	synchronized public boolean addAnnounce(String title, String text) {
 
 		boolean status = false;
 
@@ -40,7 +40,7 @@ public class Announces {
 		}
 	}
 
-	public boolean removeAnnounce(int id) {
+	synchronized public boolean removeAnnounce(int id) {
 		
 		AnnounceData found = null;
 		Iterator<AnnounceData> it = announces.iterator();
@@ -62,7 +62,7 @@ public class Announces {
 	}
 	
 	@Override
-	public String toString() {
+	synchronized public String toString() {
 		
 		StringBuilder st = new StringBuilder(Keyword.PIPE);
 		
