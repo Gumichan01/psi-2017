@@ -4,8 +4,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import data.Announces;
+import data.ListClientData;
+
 public class Server {
 
+	static volatile ListClientData clients = new ListClientData();
+	static volatile Announces announces = new Announces();
+	
 	public static void main(String[] argv) {
 
 		ServerSocket srv = null;

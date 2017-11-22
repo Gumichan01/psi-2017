@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+
+import data.ClientData;
 
 import parser.ASTmessage;
 import parser.ASTmessage.Type;
@@ -16,7 +19,8 @@ public class RunClient implements Runnable {
 	private Socket sock = null;
 	private BufferedReader bf = null;
 	private PrintWriter pw = null;
-
+	private int client_id;
+	
 	public RunClient(Socket s) {
 
 		sock = s;
@@ -127,12 +131,20 @@ public class RunClient implements Runnable {
 	// connect
 	private String evalConnection(final ASTmessage ast) {
 		
-		return null;
+		int port        = ast.getConnect().getPort();
+		InetAddress ine = sock.getInetAddress(); 
+		
+		ClientData cdata = new ClientData(ine, port);
+		client_id = cdata.getId();
+		
+		Server.clients.add(cdata);
+		return "code:con:OK\n";
 	}
 
 	// disconnect
 	private String evalDisconnection(final ASTmessage ast) {
-		
+ 		
+		Server.clients.delete(client_id);
 		return null;
 	}
 	
@@ -167,6 +179,9 @@ public class RunClient implements Runnable {
 	
 	
 	private void respond(String msg) {
+		
+		if(msg == null)
+			return;
 		
 		pw.println(msg);
 		pw.flush();
