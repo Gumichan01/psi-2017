@@ -40,6 +40,23 @@ public class Announces {
 		}
 	}
 
+	synchronized public AnnounceData getAnnounce(int id) {
+
+		AnnounceData found = null;
+		Iterator<AnnounceData> it = announces.iterator();
+
+		while (it.hasNext()) {
+
+			found = it.next();
+
+			if (found.getID() == id)
+				break;
+		}
+
+		return found;
+	}
+	
+	
 	synchronized public boolean removeAnnounce(int id) {
 
 		AnnounceData found = null;
