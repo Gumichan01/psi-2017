@@ -28,9 +28,9 @@ public class Announces {
 
 			e.printStackTrace();
 			status = false;
-			
+
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 			status = false;
 
@@ -41,38 +41,38 @@ public class Announces {
 	}
 
 	synchronized public boolean removeAnnounce(int id) {
-		
+
 		AnnounceData found = null;
 		Iterator<AnnounceData> it = announces.iterator();
-		
-		while(it.hasNext()) {
-			
+
+		while (it.hasNext()) {
+
 			found = it.next();
-			
-			if(found.getID() == id)
+
+			if (found.getID() == id)
 				break;
 		}
-		
-		if(found != null){
-			
+
+		if (found != null) {
+
 			return announces.remove(found);
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	synchronized public String toString() {
-		
+
 		StringBuilder st = new StringBuilder(Keyword.PIPE);
-		
-		for(AnnounceData a: announces) {
-			
+
+		for (AnnounceData a : announces) {
+
 			st.append(a.toString());
 			st.append(Keyword.PIPE);
 		}
-		
+
 		return st.toString();
 	}
-	
+
 }

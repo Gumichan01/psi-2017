@@ -14,13 +14,13 @@ public class ListClientData {
 	}
 
 	synchronized public boolean add(ClientData client) {
-		
-		if(!map.containsKey(client.getId())) {
-			
+
+		if (!map.containsKey(client.getId())) {
+
 			map.put(client.getId(), client);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -30,22 +30,21 @@ public class ListClientData {
 			map.remove(client.getId());
 			return true;
 		}
-		
+
 		return false;
 	}
 
-	
-	public static void main(String[]args) throws UnknownHostException {
-		
-		ClientData client1=new ClientData(InetAddress.getLocalHost(), 5555);
-		ClientData client2=new ClientData(InetAddress.getLocalHost(), 6666);
-		
-		ListClientData l=new ListClientData();
+	public static void main(String[] args) throws UnknownHostException {
+
+		ClientData client1 = new ClientData(InetAddress.getLocalHost(), 5555);
+		ClientData client2 = new ClientData(InetAddress.getLocalHost(), 6666);
+
+		ListClientData l = new ListClientData();
 		System.out.println(l.add(client1));
 		System.out.println(l.add(client2));
 		System.out.println(l.add(client2));
 		System.out.println(l.map.size());
-		
+
 		System.out.println(l.delete(client1));
 		System.out.println(l.delete(client2));
 		System.out.println(l.delete(client1));
