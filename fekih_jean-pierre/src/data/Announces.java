@@ -14,13 +14,13 @@ public class Announces {
 	}
 
 	@SuppressWarnings("finally")
-	synchronized public boolean addAnnounce(String title, String text) {
+	synchronized public boolean addAnnounce(String title, String text, int owner) {
 
 		boolean status = false;
 
 		try {
 
-			AnnounceData d = new AnnounceData(title, text);
+			AnnounceData d = new AnnounceData(title, text, owner);
 			announces.add(d);
 			status = true;
 
@@ -54,6 +54,22 @@ public class Announces {
 		}
 
 		return found;
+	}
+
+	synchronized public int getOwner(int id) {
+
+		AnnounceData found = null;
+		Iterator<AnnounceData> it = announces.iterator();
+
+		while (it.hasNext()) {
+
+			found = it.next();
+
+			if (found.getID() == id)
+				break;
+		}
+
+		return found != null ? found.getOwner() : null;
 	}
 	
 	

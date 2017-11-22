@@ -1,5 +1,7 @@
 package data;
 
+import parser.Keyword;
+
 public class AnnounceData {
 
 	private static int uid = 1;
@@ -7,8 +9,9 @@ public class AnnounceData {
 	private int id;
 	private String title;
 	private String text;
+	private int owner;
 
-	public AnnounceData(String t, String txt) {
+	public AnnounceData(String t, String txt, int ido) {
 
 		if (t == null || t.isEmpty())
 			throw new IllegalArgumentException("Invalid announce: title");
@@ -19,6 +22,7 @@ public class AnnounceData {
 		id = uid++;
 		title = t;
 		text = txt;
+		owner = ido;
 	}
 
 	public int getID() {
@@ -36,10 +40,15 @@ public class AnnounceData {
 		return text;
 	}
 
+	public int getOwner() {
+
+		return owner;
+	}
+	
 	@Override
 	public String toString() {
 
-		return title + ";" + text;
+		return title + Keyword.COLON + text;
 	}
 
 }
