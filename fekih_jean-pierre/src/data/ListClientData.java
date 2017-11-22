@@ -24,10 +24,10 @@ public class ListClientData {
 		return false;
 	}
 
-	synchronized public boolean delete(ClientData client) {
+	synchronized public boolean delete(int cid) {
 
-		if (map.containsKey(client.getId())) {
-			map.remove(client.getId());
+		if (map.containsKey(cid)) {
+			map.remove(cid);
 			return true;
 		}
 
