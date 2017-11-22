@@ -1,7 +1,5 @@
 package data;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 public class ListClientData {

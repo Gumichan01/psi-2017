@@ -11,7 +11,7 @@ public class Server {
 
 	static volatile ListClientData clients = new ListClientData();
 	static volatile Announces announces = new Announces();
-	
+
 	public static void main(String[] argv) {
 
 		ServerSocket srv = null;

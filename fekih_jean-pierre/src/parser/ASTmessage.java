@@ -1,6 +1,5 @@
 package parser;
 
-
 /**
  * ASTmesage is an abstract representation of a message
  * 
@@ -49,7 +48,6 @@ public class ASTmessage {
 			return id;
 		}
 	}
-
 
 	// Members
 	Type type;

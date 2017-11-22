@@ -239,7 +239,8 @@ public class MessageParser {
 
 			ASTmessage m1 = p1.getAST();
 
-			System.out.println(m1.getType().toString() + " " + m1.getConnect().getPort());
+			System.out.println(m1.getType().toString() + " "
+					+ m1.getConnect().getPort());
 		} else
 			System.err.println("failure p1");
 
@@ -249,7 +250,8 @@ public class MessageParser {
 
 			ASTmessage m2 = p2.getAST();
 
-			System.out.println(m2.getType() + " " + m2.getAnnounce().getTitle() + " " + m2.getAnnounce().getText());
+			System.out.println(m2.getType() + " " + m2.getAnnounce().getTitle()
+					+ " " + m2.getAnnounce().getText());
 		} else
 			System.err.println("failure p2");
 
@@ -263,7 +265,8 @@ public class MessageParser {
 		} else
 			System.err.println("failure p3");
 
-		MessageParser[] p345 = { new MessageParser("annonce:get:24"), new MessageParser("annonce:com:24"),
+		MessageParser[] p345 = { new MessageParser("annonce:get:24"),
+				new MessageParser("annonce:com:24"),
 				new MessageParser("annonce:del:24") };
 
 		int i = 0;
@@ -272,7 +275,8 @@ public class MessageParser {
 			if (mp.isWellParsed()) {
 
 				ASTmessage m345 = mp.getAST();
-				System.out.println(m345.getType() + " " + m345.getAnnounceID().getId());
+				System.out.println(m345.getType() + " "
+						+ m345.getAnnounceID().getId());
 
 			} else
 				System.err.println("failure p345 -  " + i);
