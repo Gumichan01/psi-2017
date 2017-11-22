@@ -186,7 +186,21 @@ public class RunClient implements Runnable {
 	// get client
 	private String evalGetOwner(final ASTmessage ast) {
 
-		return null;
+		int id = ast.getAnnounceID().getId();
+		Integer owner = Server.announces.getOwner(id);
+
+		if (owner == null)
+			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
+					+ Keyword.FAILURE + Keyword.ENDL;
+
+		// get client
+		ClientData cd = Server.clients.get(client_id);
+
+		if (cd == null)
+			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
+					+ Keyword.FAILURE + Keyword.ENDL;
+
+		return Keyword.CLIENT + Keyword.COLON + cd.toString() + Keyword.ENDL;
 	}
 
 	private void respond(String msg) {
