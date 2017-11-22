@@ -15,7 +15,7 @@ public class RunClient implements Runnable {
 	private Socket sock = null;
 	private BufferedReader bf = null;
 	private PrintWriter pw = null;
-	
+
 	public RunClient(Socket s) {
 
 		sock = s;
@@ -29,10 +29,9 @@ public class RunClient implements Runnable {
 
 		try {
 
-			bf = new BufferedReader(new InputStreamReader(
-					sock.getInputStream()));
-			pw = new PrintWriter(new OutputStreamWriter(
-					sock.getOutputStream()));
+			bf = new BufferedReader(
+					new InputStreamReader(sock.getInputStream()));
+			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
 
 			System.out.println("Connection from "
 					+ sock.getInetAddress().toString() + ": " + sock.getPort());
@@ -59,12 +58,8 @@ public class RunClient implements Runnable {
 					System.out.println(m.getType().toString());
 					respond(eval(m));
 
-				} else {
-
-					keep_going = false; // pour tester (à enlever)
-				}
-
-				//keep_going = false; // pour tester (à enlever)
+				} else
+					keep_going = false;
 			}
 
 		} catch (IOException ie) {
@@ -76,19 +71,60 @@ public class RunClient implements Runnable {
 		} finally {
 			try {
 				sock.close();
-			} catch (IOException e) {
-			}
+			} catch (IOException e) {}
 		}
 	}
-	
+
 	private String eval(final ASTmessage ast) {
-		
+
 		return "echo";
 	}
+
+	// connect
+	private String evalConnection(final ASTmessage ast) {
+		
+		return null;
+	}
+
+	// disconnect
+	private String evalDisconnection(final ASTmessage ast) {
+		
+		return null;
+	}
 	
-	private  void respond(String msg) {
+	// list
+	private String evalList(final ASTmessage ast) {
+		
+		return null;
+	}
+
+	// add announce
+	private String evalAddAnnounce(final ASTmessage ast) {
+		
+		return null;
+	}
+
+	private String evalDelAnnounce(final ASTmessage ast) {
+		
+		return null;
+	}
+	
+	// get announce
+	private String evalGetAnnounce(final ASTmessage ast) {
+		
+		return null;
+	}
+	
+	// get client
+	private String evalGetOwner(final ASTmessage ast) {
+		
+		return null;
+	}
+	
+	
+	private void respond(String msg) {
+		
 		pw.println(msg);
 		pw.flush();
-		
 	}
 }
