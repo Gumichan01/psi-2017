@@ -12,7 +12,6 @@ import data.AnnounceData;
 import data.ClientData;
 
 import parser.ASTmessage;
-import parser.ASTmessage.Type;
 import parser.Keyword;
 import parser.MessageParser;
 
@@ -155,7 +154,8 @@ public class RunClient implements Runnable {
 	// list
 	private String evalList(final ASTmessage ast) {
 
-		return Keyword.ANLIST + Keyword.COLON + Server.announces.toString() + Keyword.ENDL;
+		return Keyword.ANLIST + Keyword.COLON + Server.announces.toString()
+				+ Keyword.ENDL;
 	}
 
 	// add announce
