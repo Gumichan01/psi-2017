@@ -10,7 +10,7 @@ import parser.ASTmessage.Type;
  * 
  * Server / Client TODO
  * 
- * Client / Client OK
+ * Client / Client TODO
  * 
  */
 public class MessageParser {

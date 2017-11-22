@@ -1,6 +1,5 @@
 package parser;
 
-import parser.ASTmessage.Type;
 
 /**
  * ASTmesage is an abstract representation of a message
