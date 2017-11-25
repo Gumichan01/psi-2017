@@ -6,16 +6,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Collection;
+import java.util.Iterator;
+
+import misc.AnnounceVisitor;
 
 import data.AnnounceData;
+import data.Announces;
 import data.ClientData;
 
 import parser.ASTmessage;
 import parser.Keyword;
 import parser.MessageParser;
 
-public class RunClient implements Runnable {
+public class RunClient implements Runnable, AnnounceVisitor {
 
+	private String anlist = null;
 	private Socket sock = null;
 	private BufferedReader bf = null;
 	private PrintWriter pw = null;
@@ -153,8 +159,11 @@ public class RunClient implements Runnable {
 	// list
 	private String evalList(final ASTmessage ast) {
 
-		return Keyword.ANLIST + Keyword.COLON + Server.announces.toString()
-				+ Keyword.ENDL;
+		Server.announces.accept(this);
+		String response = anlist;
+		anlist = null;
+
+		return Keyword.ANLIST + Keyword.COLON + response + Keyword.ENDL;
 	}
 
 	// add announce
@@ -254,5 +263,22 @@ public class RunClient implements Runnable {
 		System.out.println(msg);
 		pw.println(msg);
 		pw.flush();
+	}
+
+	@Override
+	public void visit(Collection<AnnounceData> c) {
+
+		Announces ltmp = new Announces();
+		Iterator<AnnounceData> it = c.iterator();
+
+		while (it.hasNext()) {
+
+			AnnounceData ad = it.next();
+			
+			if(Server.clients.exists(ad.getOwner()))
+				ltmp.addAnnounce(ad);
+		}
+		
+		anlist = ltmp.toString();
 	}
 }

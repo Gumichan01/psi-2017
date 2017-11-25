@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import misc.AnnounceVisitor;
+
 import parser.Keyword;
 
 public class Announces {
@@ -15,15 +17,18 @@ public class Announces {
 		announces = new ArrayList<>();
 	}
 
+	public boolean addAnnounce(String title, String text, int owner) {
+
+		return addAnnounce(new AnnounceData(title, text, owner));
+	}
+
 	@SuppressWarnings("finally")
-	synchronized public boolean addAnnounce(String title, String text, int owner) {
+	synchronized public boolean addAnnounce(final AnnounceData data) {
 
 		boolean status = false;
 
 		try {
-
-			AnnounceData d = new AnnounceData(title, text, owner);
-			announces.add(d);
+			announces.add(data);
 			status = true;
 
 		} catch (IllegalArgumentException e) {
@@ -109,6 +114,11 @@ public class Announces {
 
 			announces.remove(atmp);
 		}
+	}
+
+	synchronized public void accept(AnnounceVisitor v) {
+
+		v.visit(announces);
 	}
 
 	@Override
