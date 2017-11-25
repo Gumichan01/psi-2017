@@ -2,6 +2,8 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import parser.Keyword;
 
 public class Announces {
@@ -93,6 +95,22 @@ public class Announces {
 		return false;
 	}
 
+	synchronized public void removeAllAnnounce(int client_id) {
+
+		List<AnnounceData> ltmp = new ArrayList<>();
+
+		for (AnnounceData a: announces) {
+			
+			if(a.getOwner() == client_id)
+				ltmp.add(a);
+		}
+		
+		for (AnnounceData atmp: ltmp) {
+			
+			announces.remove(atmp);
+		}
+	}
+	
 	@Override
 	synchronized public String toString() {
 
