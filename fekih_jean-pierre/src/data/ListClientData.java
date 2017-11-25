@@ -22,6 +22,11 @@ public class ListClientData {
 		return false;
 	}
 
+	synchronized public boolean exists(int id) {
+
+		return map.containsKey(id);
+	}
+
 	synchronized public ClientData get(int id) {
 
 		if (!map.containsKey(id)) {
