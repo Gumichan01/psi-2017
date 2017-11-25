@@ -50,8 +50,8 @@ public class RunClient implements Runnable {
 				if (received_message == null || received_message.isEmpty()) {
 
 					keep_going = false;
-					if (Server.clients.exists(client.getId()))
-						Server.clients.delete(client.getId());
+					// There is no reason to keep its announces
+					removeClientAnnounces();
 					break;
 				}
 
@@ -64,8 +64,11 @@ public class RunClient implements Runnable {
 					System.out.println(m.getType().toString());
 					respond(eval(m));
 
-				} else
+				} else {
+					
+					removeClientAnnounces();
 					keep_going = false;
+				}
 			}
 
 		} catch (IOException ie) {
@@ -173,15 +176,33 @@ public class RunClient implements Runnable {
 
 	private String evalDelAnnounce(final ASTmessage ast) {
 
-		boolean res = Server.announces.removeAnnounce(ast.getAnnounceID()
-				.getId());
+		int announce_id = ast.getAnnounceID().getId();
+		AnnounceData adata = Server.announces.getAnnounce(announce_id);
 
-		if (!res) {
+		if (adata == null) {
+
 			return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
 					+ Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
+
+		}
+
+		if (adata.getOwner() == client.getId()) {
+
+			adata = null;
+			boolean res = Server.announces.removeAnnounce(announce_id);
+
+			if (!res) {
+				return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
+						+ Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
+			} else {
+				return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
+						+ Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
+			}
+
 		} else {
+
 			return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
-					+ Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
+					+ Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
 		}
 	}
 
@@ -216,6 +237,14 @@ public class RunClient implements Runnable {
 					+ Keyword.FAILURE + Keyword.ENDL;
 
 		return Keyword.CLIENT + Keyword.COLON + cd.toString() + Keyword.ENDL;
+	}
+
+	private void removeClientAnnounces() {
+
+		Server.announces.removeAllAnnounce(client.getId());
+		
+		if (Server.clients.exists(client.getId()))
+			Server.clients.delete(client.getId());
 	}
 
 	private void respond(String msg) {
