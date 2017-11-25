@@ -12,10 +12,19 @@ public class ClientData {
 	private InetAddress ip;
 	private int port;
 
-	public ClientData(InetAddress in, int p) {
+	public ClientData(InetAddress in) {
 
 		id = uid++;
 		ip = in;
+	}
+
+	public ClientData(InetAddress in, int p) {
+
+		this(in);
+		port = p;
+	}
+
+	public void setPort(final int p) {
 		port = p;
 	}
 
