@@ -55,8 +55,6 @@ public class RunClient implements Runnable, AnnounceVisitor {
 				if (received_message == null || received_message.isEmpty()) {
 
 					keep_going = false;
-					// There is no reason to keep its announces
-					removeClientAnnounces();
 					break;
 				}
 
@@ -69,11 +67,8 @@ public class RunClient implements Runnable, AnnounceVisitor {
 					System.out.println(m.getType().toString());
 					respond(eval(m));
 
-				} else {
-
-					removeClientAnnounces();
+				} else
 					keep_going = false;
-				}
 			}
 
 		} catch (IOException ie) {
@@ -83,6 +78,9 @@ public class RunClient implements Runnable, AnnounceVisitor {
 			ne.printStackTrace();
 
 		} finally {
+			
+			removeClientAnnounces();
+			
 			try {
 				sock.close();
 			} catch (IOException e) {
