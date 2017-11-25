@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import data.AnnounceData;
@@ -65,7 +64,7 @@ public class RunClient implements Runnable {
 					respond(eval(m));
 
 				} else {
-					
+
 					removeClientAnnounces();
 					keep_going = false;
 				}
@@ -147,7 +146,7 @@ public class RunClient implements Runnable {
 	// disconnect
 	private String evalDisconnection(final ASTmessage ast) {
 
-		Server.clients.delete(client.getId());
+		removeClientAnnounces();
 		return null;
 	}
 
@@ -242,7 +241,7 @@ public class RunClient implements Runnable {
 	private void removeClientAnnounces() {
 
 		Server.announces.removeAllAnnounce(client.getId());
-		
+
 		if (Server.clients.exists(client.getId()))
 			Server.clients.delete(client.getId());
 	}
