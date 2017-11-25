@@ -20,12 +20,12 @@ public class RunClient implements Runnable {
 	private Socket sock = null;
 	private BufferedReader bf = null;
 	private PrintWriter pw = null;
-	private int client_id;
+	private ClientData client = null;
 
 	public RunClient(Socket s) {
 
 		sock = s;
-		client_id = -1;
+		client = new ClientData(sock.getInetAddress());
 	}
 
 	public void run() {
@@ -50,8 +50,8 @@ public class RunClient implements Runnable {
 				if (received_message == null || received_message.isEmpty()) {
 
 					keep_going = false;
-					if(client_id != -1)
-						Server.clients.delete(client_id);
+					if (Server.clients.exists(client.getId()))
+						Server.clients.delete(client.getId());
 					break;
 				}
 
@@ -59,9 +59,6 @@ public class RunClient implements Runnable {
 
 				if (parser.isWellParsed()) {
 
-					// TODO récupérer la repésentation abstraite du message
-					// TODO traiter la demande analysée
-					// TODO envoyer la réponse au client
 					System.out.println("OK");
 					ASTmessage m = parser.getAST();
 					System.out.println(m.getType().toString());
@@ -137,12 +134,9 @@ public class RunClient implements Runnable {
 	private String evalConnection(final ASTmessage ast) {
 
 		int port = ast.getConnect().getPort();
-		InetAddress ine = sock.getInetAddress();
+		client.setPort(port);
 
-		ClientData cdata = new ClientData(ine, port);
-		client_id = cdata.getId();
-
-		Server.clients.add(cdata);
+		Server.clients.add(client);
 		return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
 				+ Keyword.SUCCESS + Keyword.ENDL;
 	}
@@ -150,8 +144,7 @@ public class RunClient implements Runnable {
 	// disconnect
 	private String evalDisconnection(final ASTmessage ast) {
 
-		Server.clients.delete(client_id);
-		client_id = -1;
+		Server.clients.delete(client.getId());
 		return null;
 	}
 
@@ -167,7 +160,8 @@ public class RunClient implements Runnable {
 
 		boolean res = Server.announces.addAnnounce(
 				ast.getAnnounce().getTitle(), ast.getAnnounce().getText(),
-				client_id);
+				client.getId());
+
 		if (!res) {
 			return Keyword.CODE + Keyword.COLON + Keyword.ANN + Keyword.COLON
 					+ Keyword.FAILURE + Keyword.ENDL;
@@ -181,6 +175,7 @@ public class RunClient implements Runnable {
 
 		boolean res = Server.announces.removeAnnounce(ast.getAnnounceID()
 				.getId());
+
 		if (!res) {
 			return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
 					+ Keyword.COLON + Keyword.FAILURE + Keyword.ENDL;
@@ -214,7 +209,7 @@ public class RunClient implements Runnable {
 			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
 					+ Keyword.FAILURE + Keyword.ENDL;
 
-		ClientData cd = Server.clients.get(client_id);
+		ClientData cd = Server.clients.get(owner.intValue());
 
 		if (cd == null)
 			return Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON
