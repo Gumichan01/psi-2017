@@ -47,12 +47,12 @@ public class Announces {
 		AnnounceData found = null;
 		Iterator<AnnounceData> it = announces.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext() && found == null) {
 
-			found = it.next();
+			AnnounceData tmp = it.next();
 
-			if (found.getID() == id)
-				break;
+			if (tmp.getID() == id)
+				found = tmp;
 		}
 
 		return found;
@@ -63,12 +63,12 @@ public class Announces {
 		AnnounceData found = null;
 		Iterator<AnnounceData> it = announces.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext() && found == null) {
 
-			found = it.next();
+			AnnounceData tmp = it.next();
 
-			if (found.getID() == id)
-				break;
+			if (tmp.getID() == id)
+				found = tmp;
 		}
 
 		return found != null ? found.getOwner() : null;
@@ -99,18 +99,18 @@ public class Announces {
 
 		List<AnnounceData> ltmp = new ArrayList<>();
 
-		for (AnnounceData a: announces) {
-			
-			if(a.getOwner() == client_id)
+		for (AnnounceData a : announces) {
+
+			if (a.getOwner() == client_id)
 				ltmp.add(a);
 		}
-		
-		for (AnnounceData atmp: ltmp) {
-			
+
+		for (AnnounceData atmp : ltmp) {
+
 			announces.remove(atmp);
 		}
 	}
-	
+
 	@Override
 	synchronized public String toString() {
 
