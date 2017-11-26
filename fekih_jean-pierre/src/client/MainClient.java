@@ -22,6 +22,6 @@ public class MainClient {
 
 		// Run the client
 		new Thread(new Client(ine, srv_port, msg_port)).start();
-
+		new Thread(new ClientSrv(msg_port)).start();
 	}
 }
