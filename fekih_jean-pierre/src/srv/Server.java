@@ -23,7 +23,7 @@ public class Server {
 		try {
 
 			srv = new ServerSocket(port);
-			System.out.println("Server on port 2408");
+			System.out.println("Server on port " + port);
 
 			while (true) {
 

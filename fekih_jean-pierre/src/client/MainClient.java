@@ -1,11 +1,6 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.Socket;
 
 public class MainClient {
 
@@ -25,9 +20,8 @@ public class MainClient {
 		int msg_port = args.length != NPARAM ? DEFAULT_PORT_MSG : Integer
 				.parseInt(args[2]);
 
+		// Run the client
 		new Thread(new Client(ine, srv_port, msg_port)).start();
-
-		// / TODO interactive mode
 
 	}
 }
