@@ -25,55 +25,7 @@ public class MainClient {
 		int msg_port = args.length != NPARAM ? DEFAULT_PORT_MSG : Integer
 				.parseInt(args[2]);
 
-		// automatic test
-
-		Socket s = new Socket(ine, srv_port);
-		BufferedReader bf = new BufferedReader(new InputStreamReader(
-				s.getInputStream()));
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(
-				s.getOutputStream()));
-
-		String str = null;
-
-		pw.println("connect:" + msg_port);
-		pw.flush();
-
-		str = bf.readLine();
-		System.out.println(str);
-
-		pw.println("annonce:test:client @ " + msg_port);
-		pw.flush();
-
-		str = bf.readLine();
-		System.out.println(str);
-
-		pw.println("annonce:list");
-		pw.flush();
-
-		str = bf.readLine();
-		System.out.println(str);
-
-		pw.println("annonce:get:3");
-		pw.flush();
-
-		str = bf.readLine();
-		System.out.println(str);
-
-		pw.println("annonce:com:3");
-		pw.flush();
-
-		str = bf.readLine();
-		System.out.println(str);
-
-		pw.println("disconnect");
-		pw.flush();
-
-		Thread.sleep(500);
-
-		pw.println();
-		pw.flush();
-
-		s.close();
+		new Thread(new Client(ine, srv_port, msg_port)).start();
 
 		// / TODO interactive mode
 
