@@ -16,7 +16,7 @@ public class ClientSrv implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+
 		ServerSocket srv = null;
 
 		try {
