@@ -7,11 +7,11 @@ import java.net.Socket;
 
 public class ClientSrv implements Runnable {
 
-	private int srv_port;
+	private int msg_port;
 	
 	public ClientSrv(int msg_port){
 		
-		srv_port = msg_port;
+		this.msg_port = msg_port;
 	}
 	
 	@Override
@@ -21,8 +21,8 @@ public class ClientSrv implements Runnable {
 
 		try {
 
-			srv = new ServerSocket(srv_port);
-			System.out.println("Server/client on port " + srv_port);
+			srv = new ServerSocket(this.msg_port);
+			//System.out.println("Server/client on port " + srv_port);
 
 			while (true) {
 

@@ -54,6 +54,7 @@ public class RunClient implements Runnable, AnnounceVisitor {
 
 				if (received_message == null || received_message.isEmpty()) {
 
+					System.err.println("received empty message");
 					keep_going = false;
 					break;
 				}
@@ -67,8 +68,11 @@ public class RunClient implements Runnable, AnnounceVisitor {
 					System.out.println(m.getType().toString());
 					respond(eval(m));
 
-				} else
+				} else {
+
+					System.err.println("received invalid message - " + received_message);
 					keep_going = false;
+				}
 			}
 
 		} catch (IOException ie) {
@@ -78,9 +82,9 @@ public class RunClient implements Runnable, AnnounceVisitor {
 			ne.printStackTrace();
 
 		} finally {
-			
+
 			removeClientAnnounces();
-			
+
 			try {
 				sock.close();
 			} catch (IOException e) {
@@ -272,11 +276,11 @@ public class RunClient implements Runnable, AnnounceVisitor {
 		while (it.hasNext()) {
 
 			AnnounceData ad = it.next();
-			
-			if(Server.clients.exists(ad.getOwner()))
+
+			if (Server.clients.exists(ad.getOwner()))
 				ltmp.addAnnounce(ad);
 		}
-		
+
 		anlist = ltmp.toString();
 	}
 }
