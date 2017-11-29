@@ -146,7 +146,15 @@ public class MessageParser {
 
 	private void parseListAnnonce(final String[] tokens) throws Exception {
 
-		throw new Exception("parseListAnnonce() not implemented yet");
+		String [] strings = new String[tokens.length -1];
+		
+		for (int i = 0; i < strings.length; ++i) {
+			
+			strings[i] = tokens[i + 1];
+		}
+		
+		ast = new ASTmessage(Type.ANLIST, strings);
+		parsed = true;
 	}
 
 	private void parseAnnonce(final String[] tokens) throws Exception {

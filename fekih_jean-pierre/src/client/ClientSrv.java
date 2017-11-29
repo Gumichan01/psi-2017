@@ -46,4 +46,9 @@ public class ClientSrv implements Runnable {
 		}
 	}
 
+	public static void main(String [] args){
+		
+		new Thread(new ClientSrv(2409)).start();
+	}
+	
 }

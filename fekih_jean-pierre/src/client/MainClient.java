@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+import parser.ASTmessage;
+import parser.ASTmessage.Type;
 import parser.MessageParser;
 
 public class MainClient {
@@ -38,8 +40,6 @@ public class MainClient {
 		// Run the client
 		boolean keep_going = true;
 
-		new Thread(new ClientSrv(msg_port)).start();
-		
 		while (keep_going) {
 
 			System.out.println("1: Connect to the server");
@@ -90,14 +90,14 @@ public class MainClient {
 					System.out.println("DISCONNECTED");
 
 				System.out.println("write command");
-				
-				if(input.hasNextLine())
+
+				if (input.hasNextLine())
 					str = input.nextLine();
 
 				if (str.isEmpty() || str.equals("\n"))
 					continue;
 
-				//System.out.println(str);
+				// System.out.println(str);
 				pw.println(str);
 				pw.flush();
 
@@ -115,6 +115,26 @@ public class MainClient {
 				MessageParser mp = new MessageParser(s);
 
 				if (mp.isWellParsed()) {
+
+					ASTmessage ast = mp.getAST();
+
+					switch (ast.getType()) {
+
+					case ANLIST:
+						String[] array = ast.getAnnounceList().getAnnounces();
+
+						for (String elem : array)
+							System.out.println(elem);
+						break;
+
+					case CODE:
+						String msg = ast.getMSG();
+						System.out.println(msg);
+						break;
+
+					default:
+						break;
+					}
 
 				} else {
 					System.err.println("invalid message");
@@ -135,6 +155,9 @@ public class MainClient {
 
 		try {
 
+			new Thread(new ClientSrv(msg_port)).start();
+			Thread.sleep(1000);
+			
 			String str;
 			boolean keep_going = true;
 			sock = new Socket(addr, msg_port);
@@ -172,6 +195,8 @@ public class MainClient {
 				} catch (Exception e2) {
 				}
 			}
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
 
 	}
