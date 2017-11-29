@@ -90,11 +90,7 @@ public class MainClient {
 					System.out.println("DISCONNECTED");
 				
 				System.out.println("write command");
-				
-				do {
-					
-					str = input.nextLine();
-				} while(str.isEmpty());
+				str = input.nextLine();
 
 				System.out.println(str);
 				pw.println(str);
@@ -104,7 +100,7 @@ public class MainClient {
 
 				if (s == null || s.isEmpty()) {
 
-					System.out.println("EMPTY");
+					System.err.println("empty string");
 					socket.close();
 					continue;
 				}

@@ -54,7 +54,7 @@ public class RunClient implements Runnable, AnnounceVisitor {
 
 				if (received_message == null || received_message.isEmpty()) {
 
-					System.err.println("received empty message");
+					System.out.println("ERR - received empty message");
 					keep_going = false;
 					break;
 				}
@@ -70,7 +70,7 @@ public class RunClient implements Runnable, AnnounceVisitor {
 
 				} else {
 
-					System.err.println("received invalid message - " + received_message);
+					System.out.println("ERR - received invalid message - " + received_message);
 					keep_going = false;
 				}
 			}

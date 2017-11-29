@@ -41,7 +41,8 @@ public class MainClient2 {
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(
 				socket.getOutputStream()));
 
-		String s = null;
+		String s   = null;
+		String str = null;
 		
 		while(true) {
 
@@ -49,10 +50,12 @@ public class MainClient2 {
 			pw.println(s);
 			pw.flush();
 
-			String str = bf.readLine();
+			str = bf.readLine();
 			
-			if(str != null && !str.isEmpty())
-				System.out.println(str);
+			if(str == null || str.isEmpty())
+				continue;
+				
+			System.out.println(str);
 		}
 	}
 }
