@@ -51,6 +51,8 @@ public class Client implements Runnable {
 			sc.close();
 
 			switch (v) {
+			case 1:
+				break;
 
 			case 2:
 				connectClient();
@@ -128,36 +130,42 @@ public class Client implements Runnable {
 	private void connectServer() {
 
 		try {
-
+			
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
-
+			
 			Scanner sc = new Scanner(System.in);
 			String s = sc.nextLine();
 			sc.close();
-
+			
 			pw.println(s);
 			s = bf.readLine();
-
-			if (s == null || s.isEmpty()) {
-
+			
+			if(s == null || s.isEmpty()) {
+				
 				return;
 			}
-
+			
 			MessageParser mp = new MessageParser(s);
-
-			if (mp.isWellParsed()) {
-
+			
+			if(mp.isWellParsed()) {
+				
+				
 			} else {
 				return;
 			}
-
+			
+			
+			
+			
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
+		
 	}
 
 	private void connectClient() {
