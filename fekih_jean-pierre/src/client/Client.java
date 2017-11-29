@@ -36,7 +36,6 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO User Interface - interactive mode
 
 		boolean keep_going = true;
 
@@ -51,7 +50,9 @@ public class Client implements Runnable {
 			sc.close();
 
 			switch (v) {
+
 			case 1:
+				connectServer();
 				break;
 
 			case 2:
@@ -67,114 +68,54 @@ public class Client implements Runnable {
 			}
 
 		}
-
-		// automatic test
-		try {
-
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
-
-			String str = null;
-
-			pw.println("connect:" + msg_port);
-			pw.flush();
-
-			str = bf.readLine();
-			System.out.println(str);
-
-			pw.println("annonce:test:client @ " + msg_port);
-			pw.flush();
-
-			str = bf.readLine();
-			System.out.println(str);
-
-			pw.println("annonce:list");
-			pw.flush();
-
-			str = bf.readLine();
-			System.out.println(str);
-
-			pw.println("annonce:get:1");
-			pw.flush();
-
-			str = bf.readLine();
-			System.out.println(str);
-
-			pw.println("annonce:com:1");
-			pw.flush();
-
-			str = bf.readLine();
-			System.out.println(str);
-
-			pw.println("disconnect");
-			pw.flush();
-
-			pw.println();
-			pw.flush();
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		} finally {
-
-			try {
-				socket.close();
-			} catch (Exception ee) {
-
-			}
-		}
 	}
 
 	private void connectServer() {
 
 		try {
-			
+
+			boolean keep_going = true;
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
-			
-			Scanner sc = new Scanner(System.in);
-			String s = sc.nextLine();
-			sc.close();
-			
-			pw.println(s);
-			s = bf.readLine();
-			
-			if(s == null || s.isEmpty()) {
-				
-				return;
+
+			while (keep_going) {
+
+				Scanner sc = new Scanner(System.in);
+				String s = sc.nextLine();
+				sc.close();
+
+				pw.println(s);
+				s = bf.readLine();
+
+				if (s == null || s.isEmpty()) {
+
+					return;
+				}
+
+				MessageParser mp = new MessageParser(s);
+
+				if (mp.isWellParsed()) {
+
+				} else {
+					return;
+				}
 			}
-			
-			MessageParser mp = new MessageParser(s);
-			
-			if(mp.isWellParsed()) {
-				
-				
-			} else {
-				return;
-			}
-			
-			
-			
-			
-			
-			
+
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		
 	}
 
 	private void connectClient() {
+
+		Socket sock = null;
 
 		try {
 
 			String str;
 			boolean keep_going = true;
-			Socket sock = new Socket(client_addr, client_port);
+			sock = new Socket(client_addr, client_port);
 			sock.setSoTimeout(1000);
 
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
@@ -201,6 +142,14 @@ public class Client implements Runnable {
 		} catch (IOException e) {
 
 			e.printStackTrace();
+
+			if (sock != null) {
+
+				try {
+					sock.close();
+				} catch (Exception e2) {
+				}
+			}
 		}
 
 	}
