@@ -1,4 +1,4 @@
-SRC = ./*/*
+SRC = ./*/*.java
 JAVAC = javac
 
 
@@ -9,7 +9,7 @@ run-server:
 	java srv/Server
 
 run-client:
-	java srv/MainClient
+	java client/MainClient
 
 mrproper:
 	find . -name '*.class' -exec rm -f {} \;

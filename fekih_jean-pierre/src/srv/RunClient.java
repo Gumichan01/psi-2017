@@ -56,7 +56,7 @@ public class RunClient implements Runnable, AnnounceVisitor {
 
 					System.out.println("ERR - received empty message");
 					keep_going = false;
-					break;
+					continue;
 				}
 
 				parser = new MessageParser(received_message);

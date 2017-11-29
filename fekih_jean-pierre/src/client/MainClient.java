@@ -38,6 +38,8 @@ public class MainClient {
 		// Run the client
 		boolean keep_going = true;
 
+		new Thread(new ClientSrv(msg_port)).start();
+		
 		while (keep_going) {
 
 			System.out.println("1: Connect to the server");
@@ -46,7 +48,7 @@ public class MainClient {
 
 			int v = input.nextInt();
 			input.nextLine();
-			
+
 			switch (v) {
 
 			case 1:
@@ -70,8 +72,6 @@ public class MainClient {
 	private static void connectServer() {
 
 		try {
-
-			//new Thread(new ClientSrv(msg_port)).start();
 			boolean keep_going = true;
 
 			socket = new Socket(ine, srv_port);
@@ -82,20 +82,25 @@ public class MainClient {
 
 			while (keep_going) {
 
-				String str, s;
-				
-				if(socket.isConnected() && !socket.isClosed())
+				String str = "", s;
+
+				if (socket.isConnected() && !socket.isClosed())
 					System.out.println("CONNECTED");
 				else
 					System.out.println("DISCONNECTED");
-				
-				System.out.println("write command");
-				str = input.nextLine();
 
-				System.out.println(str);
+				System.out.println("write command");
+				
+				if(input.hasNextLine())
+					str = input.nextLine();
+
+				if (str.isEmpty() || str.equals("\n"))
+					continue;
+
+				//System.out.println(str);
 				pw.println(str);
 				pw.flush();
-				
+
 				s = bf.readLine();
 
 				if (s == null || s.isEmpty()) {
@@ -106,7 +111,7 @@ public class MainClient {
 				}
 
 				System.out.println(s);
-				
+
 				MessageParser mp = new MessageParser(s);
 
 				if (mp.isWellParsed()) {
@@ -119,7 +124,7 @@ public class MainClient {
 			}
 
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
 	}

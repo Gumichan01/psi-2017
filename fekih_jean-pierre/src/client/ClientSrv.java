@@ -22,7 +22,7 @@ public class ClientSrv implements Runnable {
 		try {
 
 			srv = new ServerSocket(this.msg_port);
-			//System.out.println("Server/client on port " + srv_port);
+			//System.out.println("Server/client on port " + msg_port);
 
 			while (true) {
 
