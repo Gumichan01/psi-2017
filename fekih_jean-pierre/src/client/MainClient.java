@@ -44,7 +44,8 @@ public class MainClient {
 			System.out.println("2: Connect to the client");
 			System.out.println("3: Quit");
 
-			int v = Integer.parseInt(input.next());
+			int v = input.nextInt();
+			input.nextLine();
 			
 			switch (v) {
 
@@ -83,12 +84,17 @@ public class MainClient {
 
 				String str, s;
 				
-				if(socket.isConnected())
+				if(socket.isConnected() && !socket.isClosed())
 					System.out.println("CONNECTED");
 				else
 					System.out.println("DISCONNECTED");
 				
-				str = input.nextLine();
+				System.out.println("write command");
+				
+				do {
+					
+					str = input.nextLine();
+				} while(str.isEmpty());
 
 				System.out.println(str);
 				pw.println(str);
@@ -98,7 +104,7 @@ public class MainClient {
 
 				if (s == null || s.isEmpty()) {
 
-					System.err.println("empty string");
+					System.out.println("EMPTY");
 					socket.close();
 					continue;
 				}
