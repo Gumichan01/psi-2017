@@ -11,9 +11,7 @@ import parser.ASTmessage;
 import parser.ASTmessage.Type;
 import parser.Keyword;
 import parser.MessageParser;
-import srv.Server;
 
-import data.ClientData;
 
 public class RunSClient implements Runnable {
 

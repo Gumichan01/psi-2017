@@ -49,11 +49,21 @@ public class ASTmessage {
 		}
 	}
 
+	public class ANList {
+
+		private String[] strings;
+
+		public String[] getAnnounces() {
+			return strings;
+		}
+	}
+
 	// Members
 	Type type;
 	Connect connect = null;
 	Announce announce = null;
 	AnnounceID aid = null;
+	ANList list = null;
 	String code = null;
 
 	ASTmessage(Type ty) {
@@ -85,10 +95,19 @@ public class ASTmessage {
 		announce.text = text;
 	}
 
+	// msg:text
 	public ASTmessage(Type ty, String s) {
 
 		this(ty);
 		code = s;
+	}
+
+	// annonunce:list
+	public ASTmessage(Type ty, String[] ss) {
+
+		this(ty);
+		list = new ANList();
+		list.strings = ss;
 	}
 
 	public Type getType() {
@@ -110,4 +129,10 @@ public class ASTmessage {
 	public String getMSG() {
 		return code;
 	}
+
+	public ANList getAnnounceList() {
+
+		return list;
+	}
+
 }

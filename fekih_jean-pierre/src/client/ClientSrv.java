@@ -7,22 +7,22 @@ import java.net.Socket;
 
 public class ClientSrv implements Runnable {
 
-	private int srv_port;
+	private int msg_port;
 	
 	public ClientSrv(int msg_port){
 		
-		srv_port = msg_port;
+		this.msg_port = msg_port;
 	}
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+
 		ServerSocket srv = null;
 
 		try {
 
-			srv = new ServerSocket(srv_port);
-			System.out.println("Server/client on port " + srv_port);
+			srv = new ServerSocket(this.msg_port);
+			//System.out.println("Server/client on port " + msg_port);
 
 			while (true) {
 
@@ -46,4 +46,9 @@ public class ClientSrv implements Runnable {
 		}
 	}
 
+	public static void main(String [] args){
+		
+		new Thread(new ClientSrv(2409)).start();
+	}
+	
 }

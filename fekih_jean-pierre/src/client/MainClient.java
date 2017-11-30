@@ -1,8 +1,26 @@
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
+
+import parser.ASTmessage;
+import parser.ASTmessage.Type;
+import parser.MessageParser;
 
 public class MainClient {
+
+	private static Socket socket = null;
+	private static InetAddress ine = null;
+
+	private static int srv_port;
+	private static int msg_port;
+	private static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) throws Exception {
 
@@ -11,17 +29,186 @@ public class MainClient {
 		final int DEFAULT_PORT = 2408;
 		final int DEFAULT_PORT_MSG = 2409;
 
-		InetAddress ine = args.length != NPARAM ? InetAddress
-				.getByName(DEFAULT_SERVER) : InetAddress.getByAddress(args[0]
-				.getBytes());
+		ine = args.length != NPARAM ? InetAddress.getByName(DEFAULT_SERVER)
+				: InetAddress.getByAddress(args[0].getBytes());
 
-		int srv_port = args.length != NPARAM ? DEFAULT_PORT : Integer
+		srv_port = args.length != NPARAM ? DEFAULT_PORT : Integer
 				.parseInt(args[1]);
-		int msg_port = args.length != NPARAM ? DEFAULT_PORT_MSG : Integer
+		msg_port = args.length != NPARAM ? DEFAULT_PORT_MSG : Integer
 				.parseInt(args[2]);
 
 		// Run the client
-		new Thread(new Client(ine, srv_port, msg_port)).start();
-		new Thread(new ClientSrv(msg_port)).start();
+		boolean keep_going = true;
+
+		while (keep_going) {
+
+			System.out.println("1: Connect to the server");
+			System.out.println("2: Connect to the client");
+			System.out.println("3: Quit");
+
+			int v = input.nextInt();
+			input.nextLine();
+
+			switch (v) {
+
+			case 1:
+				connectServer();
+				break;
+
+			case 2:
+				connectClient(InetAddress.getLocalHost());
+				break;
+
+			case 3:
+				keep_going = false;
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	private static void connectServer() {
+
+		try {
+			boolean keep_going = true;
+
+			socket = new Socket(ine, srv_port);
+			BufferedReader bf = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+
+			while (keep_going) {
+
+				String str = "", s="";
+
+				/*if (socket.isConnected() && !socket.isClosed())
+					System.out.println("CONNECTED");
+				else
+					System.out.println("DISCONNECTED");
+
+				System.out.println("write command");
+
+				//if (input.hasNextLine())
+					str = input.nextLine();
+
+				if (str == null || str.isEmpty())
+					continue;
+
+				System.out.println("- " + str);
+				pw.println(str);
+				pw.flush();
+
+				s = bf.readLine();
+
+				if (s == null || s.isEmpty()) {
+
+					System.err.println("empty string");
+					socket.close();
+					continue;
+				}*/
+				pw.println("connect:1234\n");
+				pw.flush();
+				str = bf.readLine();
+				if(str!=null){
+					System.out.println(str);
+					String g = input.nextLine();
+					System.out.println(g);
+					pw.println(g);
+					pw.flush();
+				}
+
+				str = bf.readLine();
+				System.out.println(str); 
+
+				MessageParser mp = new MessageParser(str);
+
+				if (mp.isWellParsed()) {
+
+					ASTmessage ast = mp.getAST();
+
+					switch (ast.getType()) {
+
+					case ANLIST:
+						String[] array = ast.getAnnounceList().getAnnounces();
+
+						for (String elem : array)
+							System.out.println(elem);
+						break;
+
+					case CODE:
+						String msg = ast.getMSG();
+						System.out.println(msg);
+						break;
+
+					default:
+						break;
+					}
+
+				} else {
+					System.err.println("invalid message");
+					socket.close();
+					return;
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private static void connectClient(InetAddress addr) {
+
+		Socket sock = null;
+
+		try {
+
+			new Thread(new ClientSrv(msg_port)).start();
+			Thread.sleep(1000);
+			
+			String str;
+			boolean keep_going = true;
+			sock = new Socket(addr, msg_port);
+			sock.setSoTimeout(1000);
+
+			BufferedReader bf = new BufferedReader(new InputStreamReader(
+					sock.getInputStream()));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+					sock.getOutputStream()));
+
+			while (keep_going) {
+
+				// write command
+				pw.println(new Scanner(System.in).nextLine());
+				pw.flush();
+
+				try {
+					str = bf.readLine();
+				} catch (Exception e) {
+					str = null;
+				}
+
+				if (str != null)
+					System.out.println(str);
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+			if (sock != null) {
+
+				try {
+					sock.close();
+				} catch (Exception e2) {
+				}
+			}
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
 	}
 }
