@@ -6,6 +6,8 @@ import com.nhamil.protInt.client.utils.Exceptions.BadConnectionException;
 import com.nhamil.protInt.client.utils.Exceptions.BadResponseException;
 import javafx.util.Pair;
 
+import java.util.Arrays;
+
 public class ResponseParsor {
     private static final String code = "code";
     private static final String OK = "OK";
@@ -17,18 +19,22 @@ public class ResponseParsor {
 
     public static void connectionResponce(String msg) throws BadConnectionException {
         String arg[] = msg.split(":",0);
-        if(arg.length == 2 &&  arg[0].equals(code) && arg[1].equals(OK))
+        //if(arg.length == 2 &&  arg[0].equals(code) && arg[1].equals(OK))
             return;
+       /*
         else
             throw new BadConnectionException();
-
+        */
     }
 
 
     public static String parseListAnnonce(String response) throws BadResponseException {
         String arg[] = response.split(":", 0);
-
+        System.out.println(Arrays.toString(arg));
+        return "ok";
+        /*
         if (arg.length > 1) {
+
             if (arg[0].equals(listannonce)) {
                 return FetchList.buildListString(arg);
             }else if(arg[0].equals(code)){
@@ -36,6 +42,7 @@ public class ResponseParsor {
             }
         }
         throw new BadResponseException("List Received was not Formatted according to Protocol");
+        */
     }
 
     public static String parseAddCreateResponse(String response) throws BadResponseException {

@@ -9,6 +9,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -45,18 +46,16 @@ public class Server {
     public static void run_Server(int portNumber, RequestInterpreter interpreter) {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket();
-            InetSocketAddress endPoint = new InetSocketAddress(Config.getHost(), portNumber);
-            serverSocket.bind(endPoint, Config.getQueueSize());
+            serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Server started  at:  " + serverSocket);
+        System.out.println("Server started  at:  " + serverSocket.getInetAddress().getHostAddress());
 
         try{
             while (true){
                 System.out.println("Waiting for a  connection...");
-                final Socket activeSocket = serverSocket.accept();
+                Socket activeSocket = serverSocket.accept();
 
                 System.out.println("Received a  connection from  " + activeSocket);
 
