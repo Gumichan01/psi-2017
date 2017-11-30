@@ -51,6 +51,7 @@ public class RunClient implements Runnable, AnnounceVisitor {
 			while (keep_going) {
 
 				received_message = bf.readLine();
+				System.out.println("------"+received_message);
 
 				if (received_message == null || received_message.isEmpty()) {
 

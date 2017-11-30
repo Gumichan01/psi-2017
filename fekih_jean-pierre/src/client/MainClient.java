@@ -82,22 +82,22 @@ public class MainClient {
 
 			while (keep_going) {
 
-				String str = "", s;
+				String str = "", s="";
 
-				if (socket.isConnected() && !socket.isClosed())
+				/*if (socket.isConnected() && !socket.isClosed())
 					System.out.println("CONNECTED");
 				else
 					System.out.println("DISCONNECTED");
 
 				System.out.println("write command");
 
-				if (input.hasNextLine())
+				//if (input.hasNextLine())
 					str = input.nextLine();
 
-				if (str.isEmpty() || str.equals("\n"))
+				if (str == null || str.isEmpty())
 					continue;
 
-				// System.out.println(str);
+				System.out.println("- " + str);
 				pw.println(str);
 				pw.flush();
 
@@ -108,11 +108,22 @@ public class MainClient {
 					System.err.println("empty string");
 					socket.close();
 					continue;
+				}*/
+				pw.println("connect:1234\n");
+				pw.flush();
+				str = bf.readLine();
+				if(str!=null){
+					System.out.println(str);
+					String g = input.nextLine();
+					System.out.println(g);
+					pw.println(g);
+					pw.flush();
 				}
 
-				System.out.println(s);
+				str = bf.readLine();
+				System.out.println(str); 
 
-				MessageParser mp = new MessageParser(s);
+				MessageParser mp = new MessageParser(str);
 
 				if (mp.isWellParsed()) {
 
