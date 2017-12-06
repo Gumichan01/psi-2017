@@ -24,7 +24,7 @@ public class MainClient {
 	public static void main(String[] args) throws Exception {
 
 		final int NPARAM = 3;
-		final String DEFAULT_SERVER = "172.28.128.153";
+		final String DEFAULT_SERVER = "172.28.130.196";
 		final int DEFAULT_PORT = 2408;
 		final int DEFAULT_PORT_MSG = 2409;
 
@@ -111,18 +111,22 @@ public class MainClient {
 					break;
 
 				default:
-					System.out.println("not processed: " + string_cmd + " | " + ( string_cmd != null ? string_cmd.length() : "null") + "~");
+					//System.out.println("not processed: " + string_cmd + " | " + ( string_cmd != null ? string_cmd.length() : "null") + "~");
 					break;
 				}
 
-				Thread.sleep(1000);
-				str = bf.readLine();
+				//Thread.sleep(1000);
 				//System.out.println(str);
 
-				if (str == null || str.isEmpty()) {
+				do {
+					
+					str = bf.readLine();
+				} while (str == null || str.isEmpty());
+				
+				/*if (str == null || str.isEmpty()) {
 					//System.out.println("EMPTY");
 					continue;
-				}
+				}*/
 
 				MessageParser mp = new MessageParser(str);
 
