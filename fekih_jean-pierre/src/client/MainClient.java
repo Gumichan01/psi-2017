@@ -24,7 +24,7 @@ public class MainClient {
 	public static void main(String[] args) throws Exception {
 
 		final int NPARAM = 3;
-		final String DEFAULT_SERVER = "localhost";
+		final String DEFAULT_SERVER = "172.28.128.153";
 		final int DEFAULT_PORT = 2408;
 		final int DEFAULT_PORT_MSG = 2409;
 
@@ -42,41 +42,89 @@ public class MainClient {
 	private static void connectServer() {
 
 		try {
-			String str = "", s = "";
-			boolean keep_going = false;
+			String str = "", string_cmd;
+			boolean keep_going = true;
 
+			System.out.println("Connection to the server ...");
 			socket = new Socket(ine, srv_port);
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
 
-			
-			System.out.println("Connection to the server ...");
-			pw.println("connect:" + msg_port + "\n");
+			pw.println("connect:" + msg_port);
 			pw.flush();
 
 			str = bf.readLine();
-			
+
 			if (str != null) {
-			
+
 				System.out.println(str);
-				
+
 				// code:con:ok
-				if(str.equals(Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON + Keyword.SUCCESS))
+				if (str.equals(Keyword.CODE + Keyword.COLON + Keyword.CON
+						+ Keyword.COLON + Keyword.SUCCESS))
 					System.out.println("connection OK");
 				else {
 					System.out.println("error connection");
 					return;
 				}
 			}
-			
+
 			while (keep_going) {
 
-				//str = bf.readLine();
+				System.out.println("a. Liste des annonces");
+				System.out.println("b. Créer nouvelle annonce");
+				System.out.println("c. Supprimer annonce");
+				System.out.println("d. Récupérer annonce");
+				System.out.println("e. Récupérer propriétaire de l'annonce");
+				System.out.println("f. Se Déconnecter");
+
+				string_cmd = input.nextLine();
+
+				switch (string_cmd) {
+
+				case "a":
+					pw.println(listAnnounce());
+					pw.flush();
+					break;
+				case "b":
+					pw.println(createAnnounce());
+					pw.flush();
+					break;
+				case "c":
+					pw.println(deleteAnnounce());
+					pw.flush();
+					break;
+				case "d":
+					pw.println(getAnnounce());
+					pw.flush();
+					break;
+				case "e":
+					pw.println(getAnnounceOwner());
+					pw.flush();
+					break;
+				case "f":
+					pw.println(disconnect());
+					pw.flush();
+					keep_going = false;
+					break;
+
+				default:
+					System.out.println("not processed: " + string_cmd + " | " + ( string_cmd != null ? string_cmd.length() : "null") + "~");
+					break;
+				}
+
+				Thread.sleep(1000);
+				str = bf.readLine();
 				//System.out.println(str);
 
-				/*MessageParser mp = new MessageParser(str);
+				if (str == null || str.isEmpty()) {
+					//System.out.println("EMPTY");
+					continue;
+				}
+
+				MessageParser mp = new MessageParser(str);
 
 				if (mp.isWellParsed()) {
 
@@ -96,7 +144,15 @@ public class MainClient {
 						System.out.println(msg);
 						break;
 
+						
+					case ANNOUNCE:
+						ASTmessage.Announce a = ast.getAnnounce();
+						System.out.println("titre - " + a.getTitle());
+						System.out.println("text  - " + a.getText());
+						break;
+						
 					default:
+						System.out.println("~" + str);
 						break;
 					}
 
@@ -104,12 +160,64 @@ public class MainClient {
 					System.err.println("invalid message");
 					socket.close();
 					return;
-				}*/
+				}
 			}
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
+	}
+
+	private static String createAnnounce() {
+
+		String title, text;
+
+		System.out.println("Titre:");
+		title = input.nextLine();
+		System.out.println("Texte:");
+		text = input.nextLine();
+
+		System.out.println(Keyword.ANNOUNCE + Keyword.COLON + title
+				+ Keyword.COLON + text + Keyword.ENDL);
+
+		return Keyword.ANNOUNCE + Keyword.COLON + title + Keyword.COLON + text;
+	}
+
+	private static String deleteAnnounce() {
+
+		String string_id;
+		System.out.println("Identifier of the announce:");
+		string_id = input.nextLine();
+
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE + Keyword.COLON + string_id;
+	}
+
+	private static String listAnnounce() {
+
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.LIST;
+	}
+
+	private static String getAnnounce() {
+
+		String string_id;
+		System.out.println("Identifier of the announce (to read):");
+		string_id = input.nextLine();
+		
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.GET + Keyword.COLON + string_id;
+	}
+
+	private static String getAnnounceOwner() {
+
+		String string_id;
+		System.out.println("Identifier of the announce (to get the owner):");
+		string_id = input.nextLine();
+		
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.COM + Keyword.COLON + string_id;
+	}
+
+	private static String disconnect() {
+
+		return "disconnect";
 	}
 }
