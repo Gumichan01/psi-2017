@@ -111,22 +111,24 @@ public class MainClient {
 					break;
 
 				default:
-					//System.out.println("not processed: " + string_cmd + " | " + ( string_cmd != null ? string_cmd.length() : "null") + "~");
+					// System.out.println("not processed: " + string_cmd + " | "
+					// + ( string_cmd != null ? string_cmd.length() : "null") +
+					// "~");
 					break;
 				}
 
-				//Thread.sleep(1000);
-				//System.out.println(str);
+				// Thread.sleep(1000);
+				// System.out.println(str);
 
 				do {
-					
+
 					str = bf.readLine();
 				} while (str == null || str.isEmpty());
-				
-				/*if (str == null || str.isEmpty()) {
-					//System.out.println("EMPTY");
-					continue;
-				}*/
+
+				/*
+				 * if (str == null || str.isEmpty()) {
+				 * //System.out.println("EMPTY"); continue; }
+				 */
 
 				MessageParser mp = new MessageParser(str);
 
@@ -144,17 +146,23 @@ public class MainClient {
 						break;
 
 					case CODE:
+					case DEL:
 						String msg = ast.getMSG();
 						System.out.println(msg);
 						break;
 
-						
 					case ANNOUNCE:
 						ASTmessage.Announce a = ast.getAnnounce();
 						System.out.println("titre - " + a.getTitle());
 						System.out.println("text  - " + a.getText());
 						break;
-						
+
+					case CLIENT:
+						ASTmessage.Client c = ast.getClient();
+						System.out.println("IP    - " + c.getAddr().toString());
+						System.out.println("port  - " + c.getPort());
+						break;
+
 					default:
 						System.out.println("~" + str);
 						break;
@@ -194,7 +202,8 @@ public class MainClient {
 		System.out.println("Identifier of the announce:");
 		string_id = input.nextLine();
 
-		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE + Keyword.COLON + string_id;
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.DELETE
+				+ Keyword.COLON + string_id;
 	}
 
 	private static String listAnnounce() {
@@ -207,8 +216,9 @@ public class MainClient {
 		String string_id;
 		System.out.println("Identifier of the announce (to read):");
 		string_id = input.nextLine();
-		
-		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.GET + Keyword.COLON + string_id;
+
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.GET + Keyword.COLON
+				+ string_id;
 	}
 
 	private static String getAnnounceOwner() {
@@ -216,8 +226,9 @@ public class MainClient {
 		String string_id;
 		System.out.println("Identifier of the announce (to get the owner):");
 		string_id = input.nextLine();
-		
-		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.COM + Keyword.COLON + string_id;
+
+		return Keyword.ANNOUNCE + Keyword.COLON + Keyword.COM + Keyword.COLON
+				+ string_id;
 	}
 
 	private static String disconnect() {
