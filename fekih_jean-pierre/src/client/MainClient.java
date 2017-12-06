@@ -1,7 +1,6 @@
 package client;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -10,7 +9,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import parser.ASTmessage;
-import parser.ASTmessage.Type;
+import parser.Keyword;
 import parser.MessageParser;
 
 public class MainClient {
@@ -37,42 +36,14 @@ public class MainClient {
 		msg_port = args.length != NPARAM ? DEFAULT_PORT_MSG : Integer
 				.parseInt(args[2]);
 
-		// Run the client
-		boolean keep_going = true;
-
-		while (keep_going) {
-
-			System.out.println("1: Connect to the server");
-			System.out.println("2: Connect to the client");
-			System.out.println("3: Quit");
-
-			int v = input.nextInt();
-			input.nextLine();
-
-			switch (v) {
-
-			case 1:
-				connectServer();
-				break;
-
-			case 2:
-				connectClient(InetAddress.getLocalHost());
-				break;
-
-			case 3:
-				keep_going = false;
-				break;
-
-			default:
-				break;
-			}
-		}
+		connectServer();
 	}
 
 	private static void connectServer() {
 
 		try {
-			boolean keep_going = true;
+			String str = "", s = "";
+			boolean keep_going = false;
 
 			socket = new Socket(ine, srv_port);
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
@@ -80,50 +51,32 @@ public class MainClient {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
 
+			
+			System.out.println("Connection to the server ...");
+			pw.println("connect:" + msg_port + "\n");
+			pw.flush();
+
+			str = bf.readLine();
+			
+			if (str != null) {
+			
+				System.out.println(str);
+				
+				// code:con:ok
+				if(str.equals(Keyword.CODE + Keyword.COLON + Keyword.CON + Keyword.COLON + Keyword.SUCCESS))
+					System.out.println("connection OK");
+				else {
+					System.out.println("error connection");
+					return;
+				}
+			}
+			
 			while (keep_going) {
 
-				String str = "", s="";
+				//str = bf.readLine();
+				//System.out.println(str);
 
-				/*if (socket.isConnected() && !socket.isClosed())
-					System.out.println("CONNECTED");
-				else
-					System.out.println("DISCONNECTED");
-
-				System.out.println("write command");
-
-				//if (input.hasNextLine())
-					str = input.nextLine();
-
-				if (str == null || str.isEmpty())
-					continue;
-
-				System.out.println("- " + str);
-				pw.println(str);
-				pw.flush();
-
-				s = bf.readLine();
-
-				if (s == null || s.isEmpty()) {
-
-					System.err.println("empty string");
-					socket.close();
-					continue;
-				}*/
-				pw.println("connect:1234\n");
-				pw.flush();
-				str = bf.readLine();
-				if(str!=null){
-					System.out.println(str);
-					String g = input.nextLine();
-					System.out.println(g);
-					pw.println(g);
-					pw.flush();
-				}
-
-				str = bf.readLine();
-				System.out.println(str); 
-
-				MessageParser mp = new MessageParser(str);
+				/*MessageParser mp = new MessageParser(str);
 
 				if (mp.isWellParsed()) {
 
@@ -151,64 +104,12 @@ public class MainClient {
 					System.err.println("invalid message");
 					socket.close();
 					return;
-				}
+				}*/
 			}
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
-	}
-
-	private static void connectClient(InetAddress addr) {
-
-		Socket sock = null;
-
-		try {
-
-			new Thread(new ClientSrv(msg_port)).start();
-			Thread.sleep(1000);
-			
-			String str;
-			boolean keep_going = true;
-			sock = new Socket(addr, msg_port);
-			sock.setSoTimeout(1000);
-
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					sock.getInputStream()));
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
-					sock.getOutputStream()));
-
-			while (keep_going) {
-
-				// write command
-				pw.println(new Scanner(System.in).nextLine());
-				pw.flush();
-
-				try {
-					str = bf.readLine();
-				} catch (Exception e) {
-					str = null;
-				}
-
-				if (str != null)
-					System.out.println(str);
-			}
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
-			if (sock != null) {
-
-				try {
-					sock.close();
-				} catch (Exception e2) {
-				}
-			}
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-
 	}
 }
