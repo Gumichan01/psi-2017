@@ -1,5 +1,8 @@
 package parser;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * ASTmesage is an abstract representation of a message
  * 
@@ -10,7 +13,7 @@ package parser;
 public class ASTmessage {
 
 	public enum Type {
-		CONNECT, CODE, LIST, ANLIST, ANNOUNCE, GET, DEL, COM, MSG, DISCONNECT
+		CONNECT, CODE, CLIENT, LIST, ANLIST, ANNOUNCE, GET, DEL, COM, MSG, DISCONNECT
 	}
 
 	// Abstraction of "connect:port"
@@ -58,6 +61,20 @@ public class ASTmessage {
 		}
 	}
 
+	public class Client {
+
+		private InetAddress ine;
+		private int port;
+
+		public InetAddress getAddr() {
+			return ine;
+		}
+
+		public int getPort() {
+			return port;
+		}
+	}
+	
 	// Members
 	Type type;
 	Connect connect = null;
@@ -65,6 +82,7 @@ public class ASTmessage {
 	AnnounceID aid = null;
 	ANList list = null;
 	String code = null;
+	Client client = null;
 
 	ASTmessage(Type ty) {
 
@@ -110,6 +128,15 @@ public class ASTmessage {
 		list.strings = ss;
 	}
 
+	
+	public ASTmessage(Type ty, String addr, int port) throws UnknownHostException {
+
+		this(ty);
+		client = new Client();
+		client.ine  = InetAddress.getByName(addr);
+		client.port = port; 
+	}
+	
 	public Type getType() {
 		return type;
 	}
@@ -135,4 +162,9 @@ public class ASTmessage {
 		return list;
 	}
 
+	public Client getClient() {
+
+		return client;
+	}
+	
 }

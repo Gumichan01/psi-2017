@@ -73,6 +73,10 @@ public class MessageParser {
 				parseDisconnect(tokens);
 				break;
 
+			case Keyword.CLIENT:
+				parseClient(tokens);
+				break;
+				
 			default:
 				parsed = false;
 				break;
@@ -213,6 +217,31 @@ public class MessageParser {
 		}
 	}
 
+	private void parseClient(final String[] tokens) throws Exception {
+
+		if (tokens.length == 10 || tokens.length == 3) {
+
+			if(tokens.length == 3){
+				
+				int v = Integer.parseInt(tokens[2]);
+				ast = new ASTmessage(Type.CLIENT, tokens[1], v);
+			
+			} else {
+
+				int v = Integer.parseInt(tokens[tokens.length -1]);
+				String s = "";
+				
+				for(int i = 1; i < tokens.length -2; i++)
+					s += tokens[i] + ":";
+				
+				s += tokens[tokens.length -2];
+				ast = new ASTmessage(Type.CLIENT, s, v);
+			}
+			
+			parsed = true;
+		}
+	}
+	
 	private void parseMessage(final String[] tokens) throws Exception {
 
 		if (tokens.length == MSG_MESSAGE_LENGTH) {
@@ -220,7 +249,7 @@ public class MessageParser {
 			parsed = true;
 		}
 	}
-
+	
 	private void parseDisconnect(final String[] tokens) throws Exception {
 
 		if (tokens.length == MSG_DISCONNECT_LENGTH) {
