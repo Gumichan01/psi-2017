@@ -24,7 +24,7 @@ public class MainClient {
 	public static void main(String[] args) throws Exception {
 
 		final int NPARAM = 3;
-		final String DEFAULT_SERVER = "172.28.130.196";
+		final String DEFAULT_SERVER = "172.28.174.223";
 		final int DEFAULT_PORT = 2408;
 		final int DEFAULT_PORT_MSG = 2409;
 
@@ -117,6 +117,10 @@ public class MainClient {
 					break;
 				}
 
+				if(keep_going==false) {
+					continue;
+				}
+				
 				// Thread.sleep(1000);
 				// System.out.println(str);
 
