@@ -24,7 +24,7 @@ public class MainClient {
 	public static void main(String[] args) throws Exception {
 
 		final int NPARAM = 3;
-		final String DEFAULT_SERVER = "172.28.174.223";
+		final String DEFAULT_SERVER = "localhost";
 		final int DEFAULT_PORT = 2408;
 		final int DEFAULT_PORT_MSG = 2409;
 
@@ -134,6 +134,7 @@ public class MainClient {
 				 * //System.out.println("EMPTY"); continue; }
 				 */
 
+				System.out.println(str);
 				MessageParser mp = new MessageParser(str);
 
 				if (mp.isWellParsed()) {
