@@ -10,7 +10,7 @@ import parser.Keyword;
 
 public class Announces {
 
-	private ArrayList<AnnounceData> announces;
+	private volatile ArrayList<AnnounceData> announces;
 
 	public Announces() {
 
@@ -23,12 +23,17 @@ public class Announces {
 	}
 
 	@SuppressWarnings("finally")
-	synchronized public boolean addAnnounce(final AnnounceData data) {
+	public boolean addAnnounce(final AnnounceData data) {
 
 		boolean status = false;
 
 		try {
-			announces.add(data);
+
+			synchronized (announces) {
+
+				announces.add(data);
+			}
+
 			status = true;
 
 		} catch (IllegalArgumentException e) {
@@ -47,92 +52,111 @@ public class Announces {
 		}
 	}
 
-	synchronized public AnnounceData getAnnounce(int id) {
+	public AnnounceData getAnnounce(int id) {
 
 		AnnounceData found = null;
-		Iterator<AnnounceData> it = announces.iterator();
 
-		while (it.hasNext() && found == null) {
+		synchronized (announces) {
 
-			AnnounceData tmp = it.next();
+			Iterator<AnnounceData> it = announces.iterator();
 
-			if (tmp.getID() == id)
-				found = tmp;
+			while (it.hasNext() && found == null) {
+
+				AnnounceData tmp = it.next();
+
+				if (tmp.getID() == id)
+					found = tmp;
+			}
 		}
 
 		return found;
 	}
 
-	synchronized public Integer getOwner(int id) {
+	public Integer getOwner(int id) {
 
 		AnnounceData found = null;
-		Iterator<AnnounceData> it = announces.iterator();
 
-		while (it.hasNext() && found == null) {
+		synchronized (announces) {
 
-			AnnounceData tmp = it.next();
+			Iterator<AnnounceData> it = announces.iterator();
 
-			if (tmp.getID() == id)
-				found = tmp;
+			while (it.hasNext() && found == null) {
+
+				AnnounceData tmp = it.next();
+
+				if (tmp.getID() == id)
+					found = tmp;
+			}
 		}
 
 		return found != null ? found.getOwner() : null;
 	}
 
-	synchronized public boolean removeAnnounce(int id) {
+	public boolean removeAnnounce(int id) {
 
 		AnnounceData found = null;
-		Iterator<AnnounceData> it = announces.iterator();
 
-		while (it.hasNext()) {
+		synchronized (announces) {
 
-			found = it.next();
+			Iterator<AnnounceData> it = announces.iterator();
 
-			if (found.getID() == id)
-				break;
-		}
+			while (it.hasNext()) {
 
-		if (found != null) {
+				found = it.next();
 
-			return announces.remove(found);
+				if (found.getID() == id)
+					break;
+			}
+
+			if (found != null) {
+
+				return announces.remove(found);
+			}
 		}
 
 		return false;
 	}
 
-	synchronized public void removeAllAnnounce(int client_id) {
+	public void removeAllAnnounce(int client_id) {
 
 		List<AnnounceData> ltmp = new ArrayList<>();
 
-		for (AnnounceData a : announces) {
+		synchronized (announces) {
 
-			if (a.getOwner() == client_id)
-				ltmp.add(a);
-		}
+			for (AnnounceData a : announces) {
 
-		for (AnnounceData atmp : ltmp) {
+				if (a.getOwner() == client_id)
+					ltmp.add(a);
+			}
 
-			announces.remove(atmp);
+			for (AnnounceData atmp : ltmp) {
+
+				announces.remove(atmp);
+			}
+
 		}
 	}
 
-	synchronized public void accept(AnnounceVisitor v) {
+	public void accept(AnnounceVisitor v) {
 
 		v.visit(announces);
 	}
 
 	@Override
-	synchronized public String toString() {
+	public String toString() {
 
 		if (announces.isEmpty())
 			return "";
 
 		StringBuilder st = new StringBuilder(Keyword.PIPE);
 
-		for (AnnounceData a : announces) {
+		synchronized (announces) {
 
-			st.append(a.getID() + Keyword.SEMICOLON + a.getTitle());
-			st.append(Keyword.PIPE);
+			for (AnnounceData a : announces) {
+
+				st.append(a.getID() + Keyword.SEMICOLON + a.getTitle());
+				st.append(Keyword.PIPE);
+			}
 		}
 
 		return st.toString();
