@@ -33,7 +33,7 @@ public class MainClient {
 		final int DEFAULT_PORT_MSG = 2409;
 
 		ine = args.length != NPARAM ? InetAddress.getByName(DEFAULT_SERVER)
-				: InetAddress.getByAddress(args[0].getBytes());
+				: InetAddress.getByName(args[0]);
 
 		srv_port = args.length != NPARAM ? DEFAULT_PORT : Integer
 				.parseInt(args[1]);
@@ -141,7 +141,6 @@ public class MainClient {
 					str = bf.readLine();
 				} while (str == null || str.isEmpty());
 
-				System.out.println(str);
 				MessageParser mp = new MessageParser(str);
 
 				if (mp.isWellParsed()) {
@@ -176,6 +175,7 @@ public class MainClient {
 
 						if (connect_to_owner) {
 
+							System.out.println("\nDisconnect from the server");
 							ine_owner = c.getAddr();
 							port_owner = c.getPort();
 							pw.println(disconnect());
@@ -205,6 +205,8 @@ public class MainClient {
 
 	private static void connectClient() {
 
+		System.out.println("Connection to " + ine_owner.toString() + ":" + port_owner + "\n");
+		
 		try {
 
 			String scmd = null;
@@ -229,7 +231,7 @@ public class MainClient {
 					break;
 
 				case "b":
-					pw.println("disconect");
+					pw.println("disconnect");
 					pw.flush();
 					keep_going = false;
 					break;
@@ -244,6 +246,9 @@ public class MainClient {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			
+			System.out.println("Connection closed");
 		}
 
 	}
