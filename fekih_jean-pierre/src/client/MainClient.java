@@ -1,6 +1,7 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -20,6 +21,9 @@ public class MainClient {
 	private static int srv_port;
 	private static int msg_port;
 	private static Scanner input = new Scanner(System.in);
+	private static boolean connect_to_owner = false;
+	private static InetAddress ine_owner;
+	private static int port_owner;
 
 	public static void main(String[] args) throws Exception {
 
@@ -37,6 +41,8 @@ public class MainClient {
 				.parseInt(args[2]);
 
 		connectServer();
+		if (connect_to_owner)
+			connectClient();
 	}
 
 	private static void connectServer() {
@@ -78,7 +84,9 @@ public class MainClient {
 				System.out.println("c. Supprimer annonce");
 				System.out.println("d. Récupérer annonce");
 				System.out.println("e. Récupérer propriétaire de l'annonce");
-				System.out.println("f. Se Déconnecter");
+				System.out
+						.println("f. Se connecter au propriétaire d'une annonce");
+				System.out.println("g. Se Déconnecter");
 
 				string_cmd = input.nextLine();
 
@@ -104,7 +112,14 @@ public class MainClient {
 					pw.println(getAnnounceOwner());
 					pw.flush();
 					break;
+
 				case "f":
+					pw.println(getAnnounceOwner());
+					pw.flush();
+					connect_to_owner = true;
+					break;
+
+				case "g":
 					pw.println(disconnect());
 					pw.flush();
 					keep_going = false;
@@ -117,22 +132,14 @@ public class MainClient {
 					break;
 				}
 
-				if(keep_going==false) {
+				if (keep_going == false) {
 					continue;
 				}
-				
-				// Thread.sleep(1000);
-				// System.out.println(str);
 
 				do {
 
 					str = bf.readLine();
 				} while (str == null || str.isEmpty());
-
-				/*
-				 * if (str == null || str.isEmpty()) {
-				 * //System.out.println("EMPTY"); continue; }
-				 */
 
 				System.out.println(str);
 				MessageParser mp = new MessageParser(str);
@@ -166,6 +173,16 @@ public class MainClient {
 						ASTmessage.Client c = ast.getClient();
 						System.out.println("IP    - " + c.getAddr().toString());
 						System.out.println("port  - " + c.getPort());
+
+						if (connect_to_owner) {
+
+							ine_owner = c.getAddr();
+							port_owner = c.getPort();
+							pw.println(disconnect());
+							pw.flush();
+							keep_going = false;
+						}
+
 						break;
 
 					default:
@@ -184,6 +201,51 @@ public class MainClient {
 
 			e.printStackTrace();
 		}
+	}
+
+	private static void connectClient() {
+
+		try {
+
+			String scmd = null;
+			boolean keep_going = true;
+			Socket socket = new Socket(ine_owner, port_owner);
+
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+
+			while (keep_going) {
+
+				System.out.println("a. Send a message");
+				System.out.println("b. Quit");
+
+				scmd = input.nextLine();
+
+				switch (scmd) {
+				case "a":
+					String msg = input.nextLine();
+					pw.println("msg:" + msg);
+					pw.flush();
+					break;
+
+				case "b":
+					pw.println("disconect");
+					pw.flush();
+					keep_going = false;
+					break;
+
+				default:
+					break;
+				}
+
+			}
+			
+			socket.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private static String createAnnounce() {
