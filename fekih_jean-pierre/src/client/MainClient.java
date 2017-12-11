@@ -126,9 +126,6 @@ public class MainClient {
 					break;
 
 				default:
-					// System.out.println("not processed: " + string_cmd + " | "
-					// + ( string_cmd != null ? string_cmd.length() : "null") +
-					// "~");
 					break;
 				}
 
@@ -205,8 +202,9 @@ public class MainClient {
 
 	private static void connectClient() {
 
-		System.out.println("Connection to " + ine_owner.toString() + ":" + port_owner + "\n");
-		
+		System.out.println("Connection to " + ine_owner.toString() + ":"
+				+ port_owner + "\n");
+
 		try {
 
 			String scmd = null;
@@ -241,13 +239,13 @@ public class MainClient {
 				}
 
 			}
-			
+
 			socket.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+
 			System.out.println("Connection closed");
 		}
 
