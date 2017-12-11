@@ -12,7 +12,6 @@ import parser.ASTmessage.Type;
 import parser.Keyword;
 import parser.MessageParser;
 
-
 public class RunSClient implements Runnable {
 
 	private Socket sock = null;
@@ -58,6 +57,10 @@ public class RunSClient implements Runnable {
 					System.out.println("OK");
 					ASTmessage m = parser.getAST();
 					System.out.println(m.getType().toString());
+
+					if (m.getType() == Type.MSG)
+						System.out.println("Message received: " + m.getMSG());
+
 					respond(eval(m));
 					keep_going = !(m.getType() == Type.DISCONNECT);
 
@@ -79,7 +82,7 @@ public class RunSClient implements Runnable {
 			}
 		}
 	}
-	
+
 	private String eval(final ASTmessage ast) {
 
 		String s = null;
@@ -107,26 +110,24 @@ public class RunSClient implements Runnable {
 
 		return s;
 	}
-	
+
 	// connect
 	private String evalConnection(final ASTmessage ast) {
 
 		return Keyword.CODE + Keyword.COLON + Keyword.SUCCESS + Keyword.ENDL;
 	}
-	
-	
+
 	private String evalMessage(final ASTmessage ast) {
-		
+
 		return null;
 	}
-	
-	
+
 	// disconnect
 	private String evalDisconnection(final ASTmessage ast) {
 
 		return null;
 	}
-	
+
 	private void respond(String msg) {
 
 		if (msg == null)
