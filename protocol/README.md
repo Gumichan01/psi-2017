@@ -76,11 +76,11 @@ Serveur :
 6) Supprimer une annonce : "annonce:del:id\n"
 
     id : ID de l'annonce
-    
+
     Réponse Serveur :
-        
+
         - "annonce:del:OK\n"
-        
+
         - "annonce:del:FAIL\n"
 
 7) Déconnexion : "disconnect\n"
@@ -88,16 +88,6 @@ Serveur :
 
 #### Communication Client/Client :
 
-- Connexion : "connect:port\n"
-
-	port : Port sur lequel le client recevant la demande doit répondre.
-
-	Réponse :
-    
-		- "code:OK\n"
-
-
 - Message : "msg:text\n"
-
 
 - Déconnexion : "disconnect\n"
